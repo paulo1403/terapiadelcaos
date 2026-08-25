@@ -23,7 +23,7 @@ export function Hero() {
       <div className="hero-aurora absolute inset-0 bg-aurora opacity-40" />
       <div className="absolute inset-0 bg-gradient-to-b from-background/0 via-transparent to-background" />
       <div className="relative z-10 w-full max-w-3xl mx-auto text-center flex flex-col items-center gap-6">
-        <p className="hero-kicker text-accent text-xs lg:text-sm tracking-[0.35em] font-medium">WAKE UP®</p>
+        <p className="hero-kicker text-muted-foreground text-xs lg:text-sm tracking-[0.35em] font-medium">WAKE UP®</p>
         <h1 className="hero-title font-display text-3xl sm:text-5xl lg:text-6xl text-primary tracking-wide leading-tight">{BRAND.name}</h1>
         <div className="hero-sub space-y-2 font-light">
           <p className="text-lg sm:text-xl lg:text-2xl text-foreground">NO VINISTE A CONTROLAR EL CAOS.</p>
