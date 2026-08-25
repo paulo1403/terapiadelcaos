@@ -3,8 +3,8 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        display: ["Cinzel", "serif"],
-        body: ["Inter", "system-ui", "sans-serif"],
+        display: ["Cormorant Garamond", "serif"],
+        body: ["Instrument Sans", "system-ui", "sans-serif"],
       },
     },
   },
