@@ -1,0 +1,65 @@
+@import 'tailwindcss';
+
+@theme {
+  --color-ink: #07090c;
+  --color-ink-2: #0c1016;
+  --color-ink-3: #121821;
+  --color-gold: #e8b659;
+  --color-gold-bright: #f4cd7a;
+  --color-gold-soft: #c79a45;
+  --color-forest: #1f5e46;
+  --color-forest-light: #2f8f6e;
+  --color-amber: #ffb74d;
+  --color-text: #ece8df;
+  --color-muted: #98a0aa;
+  --font-display: 'Cinzel', serif;
+  --font-body: 'Inter', system-ui, sans-serif;
+}
+
+:root {
+  color-scheme: dark;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--color-ink);
+  color: var(--color-text);
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+  line-height: 1.6;
+}
+
+h1, h2, h3, .font-display {
+  font-family: var(--font-display);
+  letter-spacing: 0.02em;
+}
+
+/* ponytail: gradiente dorado metálico para titulos */
+.text-gold-gradient {
+  background: linear-gradient(135deg, #f4cd7a 0%, #e8b659 40%, #c79a45 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.bg-aurora {
+  background:
+    radial-gradient(60% 50% at 50% 0%, rgba(232,182,89,0.12), transparent 70%),
+    radial-gradient(40% 40% at 80% 20%, rgba(31,94,70,0.18), transparent 70%),
+    radial-gradient(50% 50% at 15% 30%, rgba(255,183,77,0.08), transparent 70%);
+}
+
+.glass {
+  background: rgba(18, 24, 33, 0.6);
+  border: 1px solid rgba(232,182,89,0.16);
+  backdrop-filter: blur(10px);
+}
