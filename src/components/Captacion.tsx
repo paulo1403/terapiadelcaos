@@ -14,18 +14,17 @@ export function Captacion() {
         <h2 className="font-display text-3xl sm:text-4xl text-gold-gradient mb-12">POR DONDE QUIERES COMENZAR?</h2>
         <div className="grid gap-5 sm:grid-cols-2">
           {caminos.map((c) => (
-            <a key={c.t} href={c.href} className="glass rounded-2xl p-7 text-left hover:border-gold/40 transition-colors">
-              <div className="text-3xl">{c.icon}</div>
-              <h3 className="font-display text-lg text-gold mt-3">{c.t}</h3>
-              <p className="text-muted text-sm mt-2">{c.d}</p>
-              <span className="inline-block mt-4 text-sm text-gold border-b border-gold/40">{c.cta}</span>
+            <a key={c.t} href={c.href} className="card bg-base-100 border border-primary/10 hover:border-primary/40 transition-colors text-left">
+              <div className="card-body">
+                <div className="text-3xl">{c.icon}</div>
+                <h3 className="font-display text-lg text-primary mt-3">{c.t}</h3>
+                <p className="text-base-content/60 text-sm mt-2">{c.d}</p>
+                <span className="text-sm text-primary mt-4 border-b border-primary/40 inline-block w-fit">{c.cta}</span>
+              </div>
             </a>
           ))}
         </div>
-        <a href={WHATSAPP_LINK} target="_blank" rel="noreferrer"
-           className="inline-block mt-10 px-7 py-3 rounded-full bg-gold text-ink font-semibold hover:bg-gold-bright transition-colors">
-          HABLAR CON JR
-        </a>
+        <a href={WHATSAPP_LINK} target="_blank" rel="noreferrer" className="btn btn-primary rounded-full px-8 mt-10">HABLAR CON JR</a>
       </div>
     </section>
   )

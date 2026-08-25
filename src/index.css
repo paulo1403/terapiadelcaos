@@ -1,4 +1,30 @@
 @import 'tailwindcss';
+@plugin 'daisyui' {
+  themes: (
+    caos: (
+      primary: #e8b659,
+      'primary-content': #07090c,
+      secondary: #2f8f6e,
+      'secondary-content': #ece8df,
+      accent: #ffb74d,
+      'accent-content': #07090c,
+      neutral: #121821,
+      'neutral-content': #ece8df,
+      base-100: #07090c,
+      'base-200': #0c1016,
+      'base-300': #121821,
+      'base-content': #ece8df,
+      info: #2f8f6e,
+      success: #2f8f6e,
+      warning: #ffb74d,
+      error: #e0533d,
+      '--rounded-box': 1rem,
+      '--border-btn': 1px,
+    )
+  );
+};
+
+
 
 @theme {
   --color-ink: #07090c;
@@ -16,7 +42,11 @@
   --font-body: 'Inter', system-ui, sans-serif;
 }
 
-:root {
+html {
+  color-scheme: dark;
+  background: #07090c;
+}
+:root:not(.light) {
   color-scheme: dark;
 }
 
@@ -43,7 +73,6 @@ h1, h2, h3, .font-display {
   letter-spacing: 0.02em;
 }
 
-/* ponytail: gradiente dorado metálico para titulos */
 .text-gold-gradient {
   background: linear-gradient(135deg, #f4cd7a 0%, #e8b659 40%, #c79a45 100%);
   -webkit-background-clip: text;
