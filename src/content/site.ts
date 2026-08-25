@@ -13,7 +13,7 @@ export const HOTMART = {
 
 export const BRAND = {
   name: 'TERAPEUTA DEL CAOS',
-  program: 'WAKE UP(r)',
+  program: 'WAKE UP®',
   founder: 'JR Rivera',
   tagline: 'NO VINISTE A CONTROLAR EL CAOS. VINISTE A DESPERTAR DENTRO DE EL.',
 }

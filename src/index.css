@@ -1,96 +1,38 @@
-@import 'tailwindcss';
-@plugin 'daisyui' {
-  themes: (
-    caos: (
-      primary: #e8b659,
-      'primary-content': #07090c,
-      secondary: #2f8f6e,
-      'secondary-content': #ece8df,
-      accent: #ffb74d,
-      'accent-content': #07090c,
-      neutral: #121821,
-      'neutral-content': #ece8df,
-      base-100: #07090c,
-      'base-200': #0c1016,
-      'base-300': #121821,
-      'base-content': #ece8df,
-      info: #2f8f6e,
-      success: #2f8f6e,
-      warning: #ffb74d,
-      error: #e0533d,
-      '--rounded-box': 1rem,
-      '--border-btn': 1px,
-    )
-  );
-};
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
-
-
-@theme {
-  --color-ink: #07090c;
-  --color-ink-2: #0c1016;
-  --color-ink-3: #121821;
-  --color-gold: #e8b659;
-  --color-gold-bright: #f4cd7a;
-  --color-gold-soft: #c79a45;
-  --color-forest: #1f5e46;
-  --color-forest-light: #2f8f6e;
-  --color-amber: #ffb74d;
-  --color-text: #ece8df;
-  --color-muted: #98a0aa;
-  --font-display: 'Cinzel', serif;
-  --font-body: 'Inter', system-ui, sans-serif;
+@layer base {
+  :root {
+    --background: 220 20% 4%;
+    --foreground: 35 20% 92%;
+    --card: 220 20% 6%;
+    --card-foreground: 35 20% 92%;
+    --popover: 220 20% 6%;
+    --popover-foreground: 35 20% 92%;
+    --primary: 36 70% 62%;
+    --primary-foreground: 220 20% 4%;
+    --secondary: 160 50% 37%;
+    --secondary-foreground: 35 20% 92%;
+    --muted: 220 10% 10%;
+    --muted-foreground: 220 5% 60%;
+    --accent: 36 100% 65%;
+    --accent-foreground: 220 20% 4%;
+    --destructive: 0 70% 55%;
+    --destructive-foreground: 35 20% 92%;
+    --border: 220 10% 15%;
+    --input: 220 10% 15%;
+    --ring: 36 70% 62%;
+    --radius: 0.75rem;
+  }
 }
 
-html {
-  color-scheme: dark;
-  background: #07090c;
-}
-:root:not(.light) {
-  color-scheme: dark;
+@layer base {
+  * { @apply border-border; }
+  body { @apply bg-background text-foreground; font-family: Inter, system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+  h1, h2, h3, .font-display { font-family: Cinzel, serif; letter-spacing: 0.02em; }
 }
 
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
-
-html {
-  scroll-behavior: smooth;
-}
-
-body {
-  background: var(--color-ink);
-  color: var(--color-text);
-  font-family: var(--font-body);
-  -webkit-font-smoothing: antialiased;
-  line-height: 1.6;
-}
-
-h1, h2, h3, .font-display {
-  font-family: var(--font-display);
-  letter-spacing: 0.02em;
-}
-
-.text-gold-gradient {
-  background: linear-gradient(135deg, #f4cd7a 0%, #e8b659 40%, #c79a45 100%);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-}
-
-.bg-aurora {
-  background:
-    radial-gradient(60% 50% at 50% 0%, rgba(232,182,89,0.12), transparent 70%),
-    radial-gradient(40% 40% at 80% 20%, rgba(31,94,70,0.18), transparent 70%),
-    radial-gradient(50% 50% at 15% 30%, rgba(255,183,77,0.08), transparent 70%);
-}
-
-.glass {
-  background: rgba(18, 24, 33, 0.6);
-  border: 1px solid rgba(232,182,89,0.16);
-  backdrop-filter: blur(10px);
-}
-
+.text-gold-gradient { background: linear-gradient(135deg, #f4cd7a 0%, #e8b659 40%, #c79a45 100%); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.bg-aurora { background: radial-gradient(60% 50% at 50% 0%, rgba(232,182,89,0.12), transparent 70%), radial-gradient(40% 40% at 80% 20%, rgba(31,94,70,0.18), transparent 70%); }
 @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
