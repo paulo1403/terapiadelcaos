@@ -3,7 +3,7 @@ import { Hero } from './components/Hero'
 import { TresCaminos } from './components/TresCaminos'
 import { Terapia } from './components/Terapia'
 import { WakeUp } from './components/WakeUp'
-import { Captacion } from './components/Captacion'
+import { Quiz } from './components/Quiz'
 import { Audiolibros } from './components/Audiolibros'
 import { Despertares } from './components/Despertares'
 import { Medicina } from './components/Medicina'
@@ -19,9 +19,9 @@ export default function App() {
       <main>
         <Hero />
         <TresCaminos />
+        <Quiz />
         <Terapia />
         <WakeUp />
-        <Captacion />
         <Audiolibros />
         <Despertares />
         <Medicina />

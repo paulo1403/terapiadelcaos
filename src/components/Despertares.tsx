@@ -25,7 +25,7 @@ export function Despertares() {
             return (
               <article key={e.ciudad} className="card bg-base-100 border border-primary/10">
                 <div className="card-body">
-                  <span className="text-primary/60 text-xs tracking-widest">{e.ciudad.toUpperCase()}</span>
+                  <div className="flex items-center justify-between"><span className="text-primary/60 text-xs tracking-widest">{e.ciudad.toUpperCase()}</span>{e.ciudad === "Piura" && <span className="text-[10px] bg-destructive text-destructive-foreground px-2 py-0.5 rounded-full">12 CUPOS</span>}</div>
                   <h3 className="font-display text-xl text-primary mt-2">{e.nombre}</h3>
                   <p className="text-base-content/60 text-sm mt-2">{rango}</p>
                   <p className="text-base-content/60 text-sm mt-3 flex-1">{e.descripcion}</p>

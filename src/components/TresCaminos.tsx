@@ -3,7 +3,6 @@ import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter }
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Sparkles, Heart, Leaf } from 'lucide-react'
-import { WHATSAPP_LINK } from '../content/site'
 
 const caminos = [
   {
@@ -12,8 +11,8 @@ const caminos = [
     title: "4 MESES PARA DESPERTAR UNA NUEVA RELACIÓN CONTIGO",
     desc: "Proceso integral de 16 sesiones + mentoría 24/7 + herramientas de autosanación.",
     bullets: ["16 sesiones (4 meses)", "Mentoría 24/7", "Comunidad privada", "Integración continua"],
-    cta: "CONOCER WAKE UP",
-    href: "#wakeup",
+    cta: "CONOCER WAKE UP — CUPOS LIMITADOS",
+    href: "https://wa.me/51962852987?text=" + encodeURIComponent("Hola JR, me interesa WAKE UP® 4 meses (16 sesiones + mentoría). ¿Próximo grupo?") ,
     variant: "default" as const,
   },
   {
@@ -22,8 +21,8 @@ const caminos = [
     title: "UNA SESIÓN. UN ESPACIO PARA TI.",
     desc: "Virtual o presencial. Trabaja un tema concreto con acompañamiento terapéutico.",
     bullets: ["Virtual / Presencial", "Ansiedad, relaciones, límites", "Crisis vitales", "Autoconocimiento"],
-    cta: "RESERVAR SESIÓN",
-    href: WHATSAPP_LINK,
+    cta: "RESERVAR SESIÓN · VIRTUAL O PRESENCIAL",
+    href: "https://wa.me/51962852987?text=" + encodeURIComponent("Hola JR, quiero reservar Sesión de Sanación Emocional (virtual/presencial). ¿Disponibilidad esta semana?") ,
     variant: "secondary" as const,
   },
   {
@@ -32,8 +31,8 @@ const caminos = [
     title: "UNA EXPERIENCIA DE DESPERTAR",
     desc: "Sesión experiencial con respiración, presencia y, cuando corresponde, medicina ancestral.",
     bullets: ["Respiración", "Presencia", "Trabajo emocional", "Integración"],
-    cta: "CONOCER EXPERIENCIA",
-    href: "#despertares",
+    cta: "CONOCER EXPERIENCIA · EVALUACIÓN PREVIA",
+    href: "https://wa.me/51962852987?text=" + encodeURIComponent("Hola JR, me interesa Terapia del Caos + Ayahuasca. Quisiera información sobre preparación y criterios de seguridad.") ,
     variant: "outline" as const,
   },
 ]
