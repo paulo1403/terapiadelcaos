@@ -5,6 +5,10 @@ import { WakeUp } from './components/WakeUp'
 import { Captacion } from './components/Captacion'
 import { Audiolibros } from './components/Audiolibros'
 import { Despertares } from './components/Despertares'
+import { Medicina } from './components/Medicina'
+import { JR } from './components/JR'
+import { WhatsappFab } from './components/WhatsappFab'
+import { Footer } from './components/Footer'
 import './App.css'
 
 export default function App() {
@@ -18,7 +22,11 @@ export default function App() {
         <Captacion />
         <Audiolibros />
         <Despertares />
+        <Medicina />
+        <JR />
       </main>
+      <Footer />
+      <WhatsappFab />
     </>
   )
 }
