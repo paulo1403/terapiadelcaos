@@ -1,5 +1,6 @@
 import { Navbar } from './components/Navbar'
 import { Hero } from './components/Hero'
+import { TresCaminos } from './components/TresCaminos'
 import { Terapia } from './components/Terapia'
 import { WakeUp } from './components/WakeUp'
 import { Captacion } from './components/Captacion'
@@ -17,6 +18,7 @@ export default function App() {
       <Navbar />
       <main>
         <Hero />
+        <TresCaminos />
         <Terapia />
         <WakeUp />
         <Captacion />
