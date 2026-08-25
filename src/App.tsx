@@ -4,6 +4,7 @@ import { Terapia } from './components/Terapia'
 import { WakeUp } from './components/WakeUp'
 import { Captacion } from './components/Captacion'
 import { Audiolibros } from './components/Audiolibros'
+import { Despertares } from './components/Despertares'
 import './App.css'
 
 export default function App() {
@@ -16,6 +17,7 @@ export default function App() {
         <WakeUp />
         <Captacion />
         <Audiolibros />
+        <Despertares />
       </main>
     </>
   )
