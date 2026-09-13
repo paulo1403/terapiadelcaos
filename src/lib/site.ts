@@ -9,6 +9,7 @@ export const DEFAULT_SECTIONS: SiteSection[] = [
   { id: 'quiz', label: 'Quiz', visible: true },
   { id: 'terapia', label: 'Terapia del Caos', visible: true },
   { id: 'wakeup', label: 'WAKE UP', visible: true },
+  { id: 'cursos', label: 'Cursos', visible: true },
   { id: 'audiolibros', label: 'Audiolibros', visible: true },
   { id: 'despertares', label: 'Despertares', visible: true },
   { id: 'medicina', label: 'Medicina ancestral', visible: true },

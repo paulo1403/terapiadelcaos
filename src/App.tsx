@@ -4,6 +4,7 @@ import { Hero } from './components/Hero'
 import { TresCaminos } from './components/TresCaminos'
 import { Terapia } from './components/Terapia'
 import { WakeUp } from './components/WakeUp'
+import { Cursos } from './components/Cursos'
 import { Quiz } from './components/Quiz'
 import { Audiolibros } from './components/Audiolibros'
 import { Despertares } from './components/Despertares'
@@ -20,6 +21,7 @@ const REGISTRY: Record<string, ComponentType> = {
   quiz: Quiz,
   terapia: Terapia,
   wakeup: WakeUp,
+  cursos: Cursos,
   audiolibros: Audiolibros,
   despertares: Despertares,
   medicina: Medicina,
