@@ -8,6 +8,7 @@ import { Dialog, DialogContent, DialogTrigger, DialogTitle } from '@/components/
 import heroDesktop from '../assets/hero-immersive-desktop.png'
 import heroMobile from '../assets/hero-immersive-mobile.png'
 import type { HeroDepthHandle } from './HeroDepth'
+import { useSite } from '../lib/site'
 
 gsap.registerPlugin(useGSAP, ScrollTrigger)
 
@@ -38,6 +39,7 @@ function useHeroMode(): Mode {
 }
 
 export function Hero() {
+  const { content } = useSite()
   const mode = useHeroMode()
   const wrapper = useRef<HTMLElement>(null)
   const depthRef = useRef<HeroDepthHandle>(null)
@@ -131,31 +133,35 @@ export function Hero() {
 
         <div className="hero-copy relative z-10 mx-auto w-full max-w-6xl transform-gpu px-6 pb-16 pt-32 lg:px-10 lg:pb-24">
           <p className="hero-eyebrow text-[11px] font-medium uppercase tracking-[0.32em] text-[#c9c2b6]/80">
-            JR Rivera · Terapeuta · Desde 2012
+            {content['hero.eyebrow'] ?? 'JR Rivera · Terapeuta · Desde 2012'}
           </p>
 
           <h1 className="mt-5 font-display leading-[0.86] tracking-[-0.02em] text-[clamp(3rem,11vw,8.5rem)]">
-            <span className="hero-line block">Terapeuta</span>
-            <span className="hero-line block text-primary">del caos</span>
+            <span className="hero-line block">{content['hero.title1'] ?? 'Terapeuta'}</span>
+            <span className="hero-line block text-primary">
+              {content['hero.title2'] ?? 'del caos'}
+            </span>
           </h1>
 
           <div className="hero-tail mt-10 grid max-w-3xl gap-6 lg:grid-cols-[1.1fr_0.9fr]">
             <div className="space-y-3">
               <p className="font-display text-2xl leading-snug sm:text-3xl">
-                No viniste a controlar el caos.
+                {content['hero.lead1'] ?? 'No viniste a controlar el caos.'}
                 <br />
-                <span className="text-primary">Viniste a despertar dentro de él.</span>
+                <span className="text-primary">
+                  {content['hero.lead2'] ?? 'Viniste a despertar dentro de él.'}
+                </span>
               </p>
               <p className="max-w-md text-sm leading-relaxed text-[#efe9df]/70">
-                Transformación emocional e integración. Para quienes están listos para un proceso
-                diferente — con presencia y acompañamiento real.
+                {content['hero.subtitle'] ??
+                  'Transformación emocional e integración. Para quienes están listos para un proceso diferente — con presencia y acompañamiento real.'}
               </p>
             </div>
 
             <div className="flex flex-col items-start gap-4 lg:items-end">
               <div className="flex flex-col gap-3 sm:flex-row lg:flex-col">
                 <Button asChild size="lg" className="h-12 rounded-full px-8 text-[13px] tracking-wide">
-                  <a href="#terapia">CONOCER TERAPIA DEL CAOS</a>
+                  <a href="#terapia">{content['hero.cta1'] ?? 'CONOCER TERAPIA DEL CAOS'}</a>
                 </Button>
                 <Dialog>
                   <DialogTrigger asChild>
@@ -164,7 +170,7 @@ export function Hero() {
                       size="lg"
                       className="h-12 rounded-full border-[#efe9df]/25 bg-transparent px-8 text-[13px] tracking-wide text-[#efe9df] hover:bg-[#efe9df]/10 hover:text-[#efe9df]"
                     >
-                      VER HISTORIA JR
+                      {content['hero.cta2'] ?? 'VER HISTORIA JR'}
                     </Button>
                   </DialogTrigger>
                   <DialogContent className="max-w-2xl border-[#efe9df]/15 bg-[#0d0d0f] p-0 overflow-hidden">

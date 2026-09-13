@@ -1,13 +1,17 @@
 import { BRAND, NAV } from '../content/site'
 import { WA } from '../lib/wa'
+import { useSite } from '../lib/site'
 
 export function Footer() {
+  const { content } = useSite()
   return (
     <footer className="border-t border-border px-6 py-12 lg:px-10">
       <div className="mx-auto max-w-6xl">
         <div className="flex flex-col gap-8 lg:flex-row lg:items-center lg:justify-between">
           <div>
-            <p className="font-display text-lg tracking-[0.16em] text-primary">TERAPEUTA DEL CAOS</p>
+            <p className="font-display text-lg tracking-[0.16em] text-primary">
+              {content['brand.name'] ?? BRAND.name}
+            </p>
             <p className="mt-1 text-xs tracking-wide text-muted-foreground">
               {BRAND.program} · {BRAND.founder} · 12 años · +500 procesos
             </p>

@@ -12,10 +12,12 @@ import {
 import { Separator } from '@/components/ui/separator'
 import { Menu } from 'lucide-react'
 import { scrollTo } from '@/lib/lenis'
+import { useSite } from '../lib/site'
 
 export function Navbar() {
   const [active, setActive] = useState('inicio')
   const [open, setOpen] = useState(false)
+  const { content } = useSite()
 
   useEffect(() => {
     const onScroll = () => {
@@ -44,7 +46,7 @@ export function Navbar() {
           onClick={(e) => handleNav(e, 'inicio')}
           className="font-display text-[#efe9df] tracking-[0.16em] text-xs sm:text-sm whitespace-nowrap px-4 shrink-0"
         >
-          TERAPEUTA DEL CAOS
+          {content['brand.name'] ?? 'TERAPEUTA DEL CAOS'}
         </a>
 
         <nav className="hidden lg:flex items-center gap-1 flex-1 justify-center">
@@ -86,7 +88,7 @@ export function Navbar() {
             <SheetContent side="right" className="w-80 max-w-[85vw] flex flex-col">
               <SheetHeader className="text-left">
                 <SheetTitle className="font-display tracking-widest text-primary">
-                  TERAPEUTA DEL CAOS
+                  {content['brand.name'] ?? 'TERAPEUTA DEL CAOS'}
                 </SheetTitle>
               </SheetHeader>
               <Separator className="my-4" />
