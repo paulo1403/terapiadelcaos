@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { Lock, Play } from 'lucide-react'
+import { Check, Lock, Play } from 'lucide-react'
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog'
 import { WA } from '../lib/wa'
 import { useSite } from '../lib/site'
@@ -30,6 +30,7 @@ export function Cursos() {
   const [courses, setCourses] = useState<Course[] | null>(null)
   const [open, setOpen] = useState<Course | null>(null)
   const [lesson, setLesson] = useState<Lesson | null>(null)
+  const [completed, setCompleted] = useState<Set<number>>(new Set())
 
   useEffect(() => {
     fetch('/api/courses')
@@ -38,10 +39,46 @@ export function Cursos() {
       .catch(() => setCourses([]))
   }, [])
 
+  useEffect(() => {
+    if (!open) {
+      setCompleted(new Set())
+      return
+    }
+    if (!open.hasAccess) return
+    fetch(`/api/progress?courseId=${open.id}`)
+      .then((r) => (r.ok ? r.json() : { completed: [] }))
+      .then((d: { completed: number[] }) => setCompleted(new Set(d.completed)))
+      .catch(() => {})
+  }, [open])
+
+  function toggle(l: Lesson, done: boolean) {
+    const id = Number(l.id)
+    setCompleted((prev) => {
+      const next = new Set(prev)
+      if (done) next.add(id)
+      else next.delete(id)
+      return next
+    })
+    fetch('/api/progress', {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ lessonId: id, completed: done }),
+    }).catch(() => {})
+  }
+
+  function countAll(c: Course) {
+    return c.modules.reduce((n, m) => n + m.lessons.length, 0) + c.ungrouped.length
+  }
+
   if (courses && courses.length === 0) return null
 
-  const totalLessons = (c: Course) =>
-    c.modules.reduce((n, m) => n + m.lessons.length, 0) + c.ungrouped.length
+  const total = open ? countAll(open) : 0
+  const doneCount = open
+    ? open.modules.reduce(
+        (n, m) => n + m.lessons.filter((l) => completed.has(Number(l.id))).length,
+        0,
+      ) + open.ungrouped.filter((l) => completed.has(Number(l.id))).length
+    : 0
 
   return (
     <section id="cursos" className="relative px-6 py-20 lg:px-10 lg:py-28">
@@ -77,7 +114,7 @@ export function Cursos() {
               <p className="mt-1 line-clamp-2 text-sm text-muted-foreground">{course.description}</p>
               <p className="mt-1 text-xs text-muted-foreground">
                 {course.modules.length > 0 && `${course.modules.length} módulos · `}
-                {totalLessons(course)} lecciones
+                {countAll(course)} lecciones
                 {course.hasAccess ? '' : ' · acceso con invitación'}
               </p>
             </button>
@@ -100,6 +137,20 @@ export function Cursos() {
             <DialogDescription>{open?.description}</DialogDescription>
           </DialogHeader>
 
+          {open?.hasAccess && !lesson && (
+            <div className="flex items-center gap-3">
+              <div className="h-1.5 flex-1 overflow-hidden rounded-full bg-muted">
+                <div
+                  className="h-full rounded-full bg-primary transition-all"
+                  style={{ width: `${total ? (doneCount / total) * 100 : 0}%` }}
+                />
+              </div>
+              <span className="text-xs text-muted-foreground">
+                {doneCount}/{total}
+              </span>
+            </div>
+          )}
+
           {lesson ? (
             <div className="flex flex-col gap-3">
               {lesson.type === 'text' ? (
@@ -111,12 +162,26 @@ export function Cursos() {
               ) : (
                 <video src={lesson.url ?? ''} controls autoPlay playsInline className="w-full rounded-lg" />
               )}
-              <button
-                onClick={() => setLesson(null)}
-                className="w-fit text-xs text-muted-foreground underline underline-offset-4"
-              >
-                ← Volver a las lecciones
-              </button>
+              <div className="flex items-center justify-between">
+                <button
+                  onClick={() => {
+                    setLesson(null)
+                  }}
+                  className="text-xs text-muted-foreground underline underline-offset-4"
+                >
+                  ← Volver a las lecciones
+                </button>
+                {open?.hasAccess && (
+                  <label className="flex items-center gap-2 text-xs text-muted-foreground">
+                    <input
+                      type="checkbox"
+                      checked={completed.has(Number(lesson.id))}
+                      onChange={(e) => toggle(lesson, e.target.checked)}
+                    />
+                    Completada
+                  </label>
+                )}
+              </div>
             </div>
           ) : (
             <div className="flex max-h-[65dvh] flex-col gap-5 overflow-y-auto">
@@ -126,14 +191,36 @@ export function Cursos() {
                     Módulo {mi + 1} · {mod.title}
                   </p>
                   {mod.lessons.map((l, li) => (
-                    <LessonButton key={l.id} lesson={l} index={li} onOpen={setLesson} course={open} />
+                    <LessonButton
+                      key={l.id}
+                      lesson={l}
+                      index={li}
+                      course={open}
+                      completed={completed.has(Number(l.id))}
+                      onToggle={toggle}
+                      onOpen={(x) => {
+                        setLesson(x)
+                        if (open.hasAccess) toggle(x, true)
+                      }}
+                    />
                   ))}
                 </div>
               ))}
               {open && open.ungrouped.length > 0 && (
                 <div className="flex flex-col gap-2">
                   {open.ungrouped.map((l, li) => (
-                    <LessonButton key={l.id} lesson={l} index={li} onOpen={setLesson} course={open} />
+                    <LessonButton
+                      key={l.id}
+                      lesson={l}
+                      index={li}
+                      course={open}
+                      completed={completed.has(Number(l.id))}
+                      onToggle={toggle}
+                      onOpen={(x) => {
+                        setLesson(x)
+                        if (open.hasAccess) toggle(x, true)
+                      }}
+                    />
                   ))}
                 </div>
               )}
@@ -148,13 +235,17 @@ export function Cursos() {
 function LessonButton({
   lesson,
   index,
-  onOpen,
   course,
+  completed,
+  onToggle,
+  onOpen,
 }: {
   lesson: Lesson
   index: number
-  onOpen: (l: Lesson) => void
   course: Course
+  completed: boolean
+  onToggle: (l: Lesson, done: boolean) => void
+  onOpen: (l: Lesson) => void
 }) {
   const available = lesson.type === 'text' ? !!lesson.body : !!lesson.url
   const label = lesson.type === 'audio' ? 'audio' : lesson.type === 'text' ? 'texto' : 'video'
@@ -177,16 +268,28 @@ function LessonButton({
   }
 
   return (
-    <button
-      onClick={() => onOpen(lesson)}
-      className="flex items-center gap-3 rounded-xl border border-border px-3 py-3 text-left transition-colors hover:border-primary/40 hover:text-primary"
-    >
-      <span className="font-display text-lg text-primary/50">{String(index + 1).padStart(2, '0')}</span>
-      <span className="flex-1 text-sm">{lesson.title}</span>
-      <span className="text-[10px] uppercase tracking-wider text-muted-foreground">
-        {lesson.free ? 'gratis' : label}
-      </span>
-      <Play className="h-4 w-4" />
-    </button>
+    <div className="flex items-center gap-2 rounded-xl border border-border px-3 py-3">
+      {course.hasAccess ? (
+        <button
+          type="button"
+          aria-label="Marcar completada"
+          onClick={() => onToggle(lesson, !completed)}
+          className={`grid size-5 shrink-0 place-items-center rounded-full border transition-colors ${
+            completed ? 'border-primary bg-primary text-primary-foreground' : 'border-border'
+          }`}
+        >
+          {completed && <Check className="h-3.5 w-3.5" />}
+        </button>
+      ) : (
+        <span className="font-display text-lg text-primary/40">{String(index + 1).padStart(2, '0')}</span>
+      )}
+      <button onClick={() => onOpen(lesson)} className="flex flex-1 items-center gap-3 text-left transition-colors hover:text-primary">
+        <span className="flex-1 text-sm">{lesson.title}</span>
+        <span className="text-[10px] uppercase tracking-wider text-muted-foreground">
+          {lesson.free ? 'gratis' : label}
+        </span>
+        <Play className="h-4 w-4" />
+      </button>
+    </div>
   )
 }
