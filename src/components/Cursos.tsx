@@ -1,12 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Play } from 'lucide-react'
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-} from '@/components/ui/dialog'
+import { Modal } from '@/components/ui/Modal'
 import { useSite } from '../lib/site'
 
 type Lesson = { id: number; title: string; url: string }
@@ -74,55 +68,43 @@ export function Cursos() {
         </div>
       </div>
 
-      <Dialog
+      <Modal
         open={!!open}
-        onOpenChange={(o) => {
-          if (!o) {
-            setOpen(null)
-            setPlaying(null)
-          }
+        onClose={() => {
+          setOpen(null)
+          setPlaying(null)
         }}
+        title={open?.title ?? ''}
       >
-        <DialogContent className="max-w-2xl">
-          <DialogHeader>
-            <DialogTitle className="font-display text-2xl">{open?.title}</DialogTitle>
-            <DialogDescription>{open?.description}</DialogDescription>
-          </DialogHeader>
-          {playing ? (
-            <div>
-              <video
-                src={playing.url}
-                controls
-                autoPlay
-                playsInline
-                className="w-full rounded-lg"
-              />
+        <p className="text-sm text-muted-foreground">{open?.description}</p>
+        {playing ? (
+          <div className="mt-4">
+            <video src={playing.url} controls autoPlay playsInline className="w-full rounded-lg" />
+            <button
+              onClick={() => setPlaying(null)}
+              className="mt-3 text-xs text-muted-foreground underline underline-offset-4"
+            >
+              ← Volver a lecciones
+            </button>
+          </div>
+        ) : (
+          <div className="mt-4 flex flex-col divide-y divide-border">
+            {open?.lessons.map((lesson, index) => (
               <button
-                onClick={() => setPlaying(null)}
-                className="mt-3 text-xs text-muted-foreground underline underline-offset-4"
+                key={lesson.id}
+                onClick={() => setPlaying(lesson)}
+                className="flex items-center gap-3 py-3 text-left transition-colors hover:text-primary"
               >
-                ← Volver a lecciones
+                <span className="font-display text-lg text-primary/50">
+                  {String(index + 1).padStart(2, '0')}
+                </span>
+                <span className="flex-1 text-sm">{lesson.title}</span>
+                <Play className="h-4 w-4" />
               </button>
-            </div>
-          ) : (
-            <div className="flex flex-col divide-y divide-border">
-              {open?.lessons.map((lesson, index) => (
-                <button
-                  key={lesson.id}
-                  onClick={() => setPlaying(lesson)}
-                  className="flex items-center gap-3 py-3 text-left transition-colors hover:text-primary"
-                >
-                  <span className="font-display text-lg text-primary/50">
-                    {String(index + 1).padStart(2, '0')}
-                  </span>
-                  <span className="flex-1 text-sm">{lesson.title}</span>
-                  <Play className="h-4 w-4" />
-                </button>
-              ))}
-            </div>
-          )}
-        </DialogContent>
-      </Dialog>
+            ))}
+          </div>
+        )}
+      </Modal>
     </section>
   )
 }
