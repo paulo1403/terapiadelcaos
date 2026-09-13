@@ -1,14 +1,34 @@
-import { useRef } from 'react'
+import { useEffect, useRef, useState, lazy, Suspense } from 'react'
 import gsap from 'gsap'
 import { useGSAP } from '@gsap/react'
 import { WHATSAPP_LINK } from '../content/site'
 import { Button } from '@/components/ui/button'
 import { Dialog, DialogContent, DialogTrigger, DialogTitle } from '@/components/ui/dialog'
-import { HeroDepth } from './HeroDepth'
 import heroDesktop from '../assets/hero-immersive-desktop.png'
+
+// Carga diferida: three.js sale del bundle crítico. Solo se descarga ≥640px sin reduced-motion.
+const HeroDepth = lazy(() => import('./HeroDepth').then((m) => ({ default: m.HeroDepth })))
+
+function useDepthEnabled() {
+  const [enabled, setEnabled] = useState(false)
+  useEffect(() => {
+    const wide = window.matchMedia('(min-width: 640px)')
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)')
+    const update = () => setEnabled(wide.matches && !reduce.matches)
+    update()
+    wide.addEventListener('change', update)
+    reduce.addEventListener('change', update)
+    return () => {
+      wide.removeEventListener('change', update)
+      reduce.removeEventListener('change', update)
+    }
+  }, [])
+  return enabled
+}
 
 export function Hero() {
   const scope = useRef<HTMLElement>(null)
+  const depthOn = useDepthEnabled()
 
   useGSAP(
     () => {
@@ -46,8 +66,12 @@ export function Hero() {
         aria-hidden="true"
         className="absolute inset-0 h-full w-full object-cover"
       />
-      {/* parallax de profundidad WebGL */}
-      <HeroDepth src={heroDesktop} strength={0.16} className="absolute inset-0 hidden sm:block" />
+      {/* parallax de profundidad WebGL (carga diferida; solo ≥640px sin reduced-motion) */}
+      {depthOn && (
+        <Suspense fallback={null}>
+          <HeroDepth src={heroDesktop} strength={0.16} className="absolute inset-0" />
+        </Suspense>
+      )}
       {/* overlays: ink para legibilidad + viñeta */}
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(130%_95%_at_22%_12%,transparent_35%,rgba(8,8,9,0.45)_72%,#08080a_100%)]" />
       <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#08080a] via-[#08080a]/35 to-transparent" />

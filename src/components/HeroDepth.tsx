@@ -27,12 +27,12 @@ export function HeroDepth({ src, strength = 0.16, className }: Props) {
     let disposed = false
 
     try {
-      renderer = new THREE.WebGLRenderer({ antialias: false, alpha: true, powerPreference: 'high-performance' })
+      renderer = new THREE.WebGLRenderer({ antialias: false, alpha: true, powerPreference: 'default' })
     } catch {
       return
     }
 
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.5))
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1))
     renderer.setSize(el.clientWidth, el.clientHeight)
     renderer.domElement.style.width = '100%'
     renderer.domElement.style.height = '100%'
@@ -123,7 +123,7 @@ export function HeroDepth({ src, strength = 0.16, className }: Props) {
         uMouse: uniforms.uMouse,
         uTime: uniforms.uTime,
         uStrength: { value: strength * 2.4 },
-        uPixelRatio: { value: Math.min(window.devicePixelRatio || 1, 1.5) },
+        uPixelRatio: { value: Math.min(window.devicePixelRatio || 1, 1) },
       },
       vertexShader: /* glsl */ `
         uniform vec2 uMouse;
@@ -167,37 +167,84 @@ export function HeroDepth({ src, strength = 0.16, className }: Props) {
       renderer?.render(scene, camera)
     })
 
+    // Render bajo demanda: un frame por movimiento, con amortiguación breve que
+    // se detiene al converger. Sin loop perpetuo → idle = 0 frames.
+    let visible = true
+    let scheduled = false
+    let running = false
+    let last = 0
+
+    const target = new THREE.Vector2(0, 0)
+
+    const render = () => {
+      if (disposed || !renderer) return
+      renderer.render(scene, camera)
+    }
+
+    const tick = () => {
+      scheduled = false
+      if (!renderer || !visible) {
+        running = false
+        return
+      }
+      const now = performance.now()
+      uniforms.uTime.value += Math.min((now - last) / 1000, 0.05)
+      last = now
+      uniforms.uMouse.value.lerp(target, 0.06)
+      renderer.render(scene, camera)
+      if (uniforms.uMouse.value.distanceToSquared(target) > 1e-6) {
+        scheduled = true
+        raf = requestAnimationFrame(tick)
+      } else {
+        running = false
+      }
+    }
+
+    const requestRender = () => {
+      if (scheduled || !visible) return
+      if (!running) {
+        last = performance.now()
+        running = true
+      }
+      scheduled = true
+      raf = requestAnimationFrame(tick)
+    }
+
+    const onPointer = (e: PointerEvent) => {
+      if (!visible) return
+      const r = el.getBoundingClientRect()
+      target.set(((e.clientX - r.left) / r.width - 0.5) * 2, ((e.clientY - r.top) / r.height - 0.5) * 2)
+      requestRender()
+    }
+
     const resize = () => {
       if (!renderer || !el) return
       const w = el.clientWidth
       const h = el.clientHeight
       renderer.setSize(w, h)
       uniforms.uViewAspect.value = w / h
-      if (!raf) renderer.render(scene, camera)
+      render()
     }
-    window.addEventListener('resize', resize)
-    resize()
 
-    const target = new THREE.Vector2(0, 0)
-    const onPointer = (e: PointerEvent) => {
-      const r = el.getBoundingClientRect()
-      target.set(((e.clientX - r.left) / r.width - 0.5) * 2, ((e.clientY - r.top) / r.height - 0.5) * 2)
-    }
-    window.addEventListener('pointermove', onPointer)
+    const io = new IntersectionObserver(
+      ([entry]) => {
+        visible = entry.isIntersecting
+        if (visible) requestRender()
+      },
+      { threshold: 0 },
+    )
 
-    const clock = new THREE.Clock()
-    const tick = () => {
-      if (!renderer) return
-      uniforms.uMouse.value.lerp(target, 0.06)
-      uniforms.uTime.value = clock.getElapsedTime()
-      renderer.render(scene, camera)
-      raf = requestAnimationFrame(tick)
+    if (!reduced) {
+      window.addEventListener('resize', resize)
+      window.addEventListener('pointermove', onPointer, { passive: true })
+      io.observe(el)
+      resize()
     }
-    if (!reduced) raf = requestAnimationFrame(tick)
 
     return () => {
       disposed = true
       cancelAnimationFrame(raf)
+      io.disconnect()
       window.removeEventListener('resize', resize)
       window.removeEventListener('pointermove', onPointer)
       material.dispose()
