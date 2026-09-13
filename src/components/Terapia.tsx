@@ -1,31 +1,70 @@
+import { WA } from '../lib/wa'
+
+const PASOS = [
+  { n: '01', t: 'Sentir', d: 'Volver al cuerpo.' },
+  { n: '02', t: 'Comprender', d: 'Ver el patrón.' },
+  { n: '03', t: 'Liberar', d: 'Soltar lo que pesa.' },
+  { n: '04', t: 'Integrar', d: 'Hacerlo vida.' },
+  { n: '05', t: 'Despertar', d: 'Elegir consciente.' },
+]
+
 export function Terapia() {
-  const pasos = [
-    { n: '01', t: 'SENTIR', d: 'Volver al cuerpo y reconocer lo que esta ocurriendo.' },
-    { n: '02', t: 'COMPRENDER', d: 'Observar patrones, pensamientos, emociones y mecanismos aprendidos.' },
-    { n: '03', t: 'LIBERAR', d: 'Trabajar aquello que ya no queremos seguir cargando.' },
-    { n: '04', t: 'INTEGRAR', d: 'Convertir lo comprendido en conciencia aplicable a la vida cotidiana.' },
-    { n: '05', t: 'DESPERTAR', d: 'Construir una relacion mas consciente con nosotros mismos.' },
-  ]
   return (
-    <section id="terapia" className="py-24 px-5 max-w-5xl mx-auto">
-      <p className="text-accent text-sm tracking-[0.3em] mb-4">EL CAOS NO ES TU ENEMIGO</p>
-      <h2 className="font-display text-3xl sm:text-5xl text-gold-gradient mb-8">ES INFORMACION.</h2>
-      <p className="text-base-content/60 max-w-2xl text-lg">
-        Hay momentos en los que nuestra vida deja de funcionar como antes. Relaciones, perdidas,
-        crisis, cambios, emociones, preguntas y experiencias pueden hacernos sentir que todo se
-        desordena. Terapia del Caos propone mirar ese proceso desde otro lugar. No siempre
-        necesitamos escapar del caos. A veces necesitamos aprender a atravesarlo conscientemente.
-      </p>
-      <div className="mt-16 grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
-        {pasos.map((p) => (
-          <div key={p.n} className="card bg-base-200 border border-primary/10 hover:border-primary/40 transition-colors">
-            <div className="card-body p-6">
-              <span className="text-primary/60 font-display text-2xl">{p.n}</span>
-              <h3 className="font-display text-lg text-primary mt-2">{p.t}</h3>
-              <p className="text-base-content/60 text-sm mt-3">{p.d}</p>
-            </div>
+    <section id="terapia" className="relative px-6 py-20 lg:px-10 lg:py-28">
+      <div className="mx-auto grid max-w-6xl gap-14 lg:grid-cols-[1.05fr_0.95fr] lg:gap-20">
+        <div>
+          <p className="text-[11px] uppercase tracking-[0.3em] text-primary">Terapia del Caos</p>
+          <h2 className="mt-5 font-display leading-[0.9] tracking-[-0.02em]">
+            <span className="block text-lg uppercase tracking-[0.22em] text-muted-foreground sm:text-xl">
+              El caos no es tu enemigo.
+            </span>
+            <span className="mt-3 block text-[clamp(3rem,9vw,6.5rem)] text-primary">Es</span>
+            <span className="block text-[clamp(3rem,9vw,6.5rem)]">información.</span>
+          </h2>
+          <p className="mt-8 max-w-xl text-sm leading-relaxed text-muted-foreground lg:text-[15px]">
+            Relaciones, pérdidas, crisis. Cuando todo se desordena, no siempre hay que escapar.
+            <span className="font-medium text-foreground"> A veces hay que atravesarlo — con presencia.</span>
+          </p>
+          <p className="mt-3 max-w-xl text-xs text-muted-foreground">
+            No estás solo en esto. Te acompaño a mirar el caos como proceso, no como falla.
+          </p>
+          <a
+            href={WA('Hola JR, me interesa Terapia del Caos. Quiero atravesar mi proceso con acompañamiento.')}
+            target="_blank"
+            rel="noreferrer"
+            className="mt-8 inline-flex h-12 items-center rounded-full bg-primary px-8 text-sm font-medium text-primary-foreground transition-opacity hover:opacity-90"
+          >
+            QUIERO ATRAVESARLO
+          </a>
+        </div>
+
+        <div className="lg:pt-2">
+          <div className="mb-2 flex items-center gap-3">
+            <span className="text-[11px] uppercase tracking-[0.3em] text-muted-foreground">
+              Proceso en 5 pasos
+            </span>
+            <span className="h-px flex-1 bg-border" />
           </div>
-        ))}
+          <div>
+            {PASOS.map((p, i) => (
+              <div key={p.n}>
+                <div className="group flex items-baseline gap-5 py-4">
+                  <span className="font-display text-2xl leading-none text-primary/40 transition-colors group-hover:text-primary">
+                    {p.n}
+                  </span>
+                  <div className="min-w-0 flex-1">
+                    <h3 className="font-display text-xl leading-none tracking-wide">{p.t}</h3>
+                    <p className="mt-1 text-sm text-muted-foreground">{p.d}</p>
+                  </div>
+                </div>
+                {i < PASOS.length - 1 && <div className="h-px bg-border/60" />}
+              </div>
+            ))}
+          </div>
+          <p className="mt-6 text-xs text-muted-foreground">
+            No es lineal perfecto. <span className="font-medium text-foreground">Es un espiral.</span> Vuelves, pero más consciente.
+          </p>
+        </div>
       </div>
     </section>
   )

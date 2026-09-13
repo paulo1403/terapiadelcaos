@@ -1,14 +1,12 @@
 // Configuracion centralizada de Terapeuta del Caos.
-// Editar aqui para cambiar textos, eventos, productos y enlaces sin tocar componentes.
 
 export const WHATSAPP_NUMBER = '51962852987'
 export const WHATSAPP_LINK = 'https://wa.me/' + WHATSAPP_NUMBER
 
-// Hotmart: cambiar un solo lugar actualiza todos los checkouts.
 export const HOTMART = {
-  audiobooks: '', // HOTMART_AUDIOBOOKS_URL
-  wakeup: '', // HOTMART_WAKEUP_URL
-  mentoria: '', // HOTMART_MENTORIA_URL
+  audiobooks: '',
+  wakeup: '',
+  mentoria: '',
 }
 
 export const BRAND = {
@@ -18,15 +16,13 @@ export const BRAND = {
   tagline: 'NO VINISTE A CONTROLAR EL CAOS. VINISTE A DESPERTAR DENTRO DE EL.',
 }
 
+// ponytail: NAV minimal - 5 items max, resto accesible via scroll/footer. Ampliar solo si seccion necesita nav directo.
 export const NAV = [
   { id: 'inicio', label: 'INICIO' },
-  { id: 'terapia', label: 'TERAPIA DEL CAOS' },
+  { id: 'terapia', label: 'TERAPIA' },
   { id: 'wakeup', label: 'WAKE UP' },
   { id: 'despertares', label: 'DESPERTARES' },
-  { id: 'experiencias', label: 'EXPERIENCIAS' },
-  { id: 'audiolibros', label: '21 AUDIOLIBROS' },
-  { id: 'jr', label: 'SOBRE JR' },
-  { id: 'contacto', label: 'CONTACTO' },
+  { id: 'jr', label: 'JR' },
 ]
 
 export type Evento = {

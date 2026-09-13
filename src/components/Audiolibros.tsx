@@ -1,11 +1,9 @@
 import { useState } from 'react'
-import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card'
-import { Badge } from '@/components/ui/badge'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog'
 import { Search, Play } from 'lucide-react'
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog'
+import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel'
 import { HOTMART } from '../content/site'
+import { WA } from '../lib/wa'
 
 type Libro = { id: number; titulo: string; cat: string; desc: string }
 
@@ -39,70 +37,126 @@ export function Audiolibros() {
   const [q, setQ] = useState('')
   const [cat, setCat] = useState('Todos')
   const [open, setOpen] = useState<Libro | null>(null)
-
-  const filtered = LIBROS.filter(l => (cat === 'Todos' || l.cat === cat) && l.titulo.toLowerCase().includes(q.toLowerCase()))
-  const featured = filtered.slice(0, 6)
+  const filtered = LIBROS.filter(
+    (l) =>
+      (cat === 'Todos' || l.cat === cat) &&
+      (l.titulo.toLowerCase().includes(q.toLowerCase()) ||
+        l.cat.toLowerCase().includes(q.toLowerCase())),
+  )
 
   return (
-    <section id="audiolibros" className="py-20 px-5 lg:px-8 bg-muted/20">
-      <div className="max-w-6xl mx-auto">
-        <div className="text-center max-w-2xl mx-auto">
-          <p className="text-xs tracking-[0.3em] text-muted-foreground">21 AUDIO LIBROS DE SANACIÓN</p>
-          <h2 className="font-display text-3xl lg:text-4xl mt-2">TU PROCESO TAMBIÉN PUEDE COMENZAR DESDE CASA</h2>
-          <p className="text-sm text-muted-foreground mt-3">Biblioteca curada — escucha 2 min de cada uno, elige tu puerta.</p>
+    <section id="audiolibros" className="relative px-6 py-20 lg:px-10 lg:py-28">
+      <div className="mx-auto max-w-6xl">
+        <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
+          <div className="max-w-xl">
+            <p className="text-[11px] uppercase tracking-[0.3em] text-primary">21 audiolibros</p>
+            <h2 className="mt-4 font-display text-[clamp(2rem,5vw,3.5rem)] leading-[0.95] tracking-[-0.02em]">
+              Tu proceso desde casa
+            </h2>
+            <p className="mt-4 text-sm leading-relaxed text-muted-foreground">
+              Escucha 2 min de cada uno. Elige tu puerta.{' '}
+              <span className="font-medium text-foreground">Biblioteca curada por JR.</span>
+            </p>
+          </div>
+          <div className="relative w-full lg:w-80">
+            <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+            <input
+              value={q}
+              onChange={(e) => setQ(e.target.value)}
+              placeholder="Buscar: ansiedad, duelo..."
+              className="h-11 w-full rounded-full border border-border bg-transparent pl-9 pr-4 text-sm outline-none transition-colors placeholder:text-muted-foreground focus:border-primary/50"
+            />
+          </div>
         </div>
 
-        <div className="flex flex-col sm:flex-row gap-3 mt-8 max-w-3xl mx-auto">
-          <div className="relative flex-1">
-            <Search className="absolute left-3 top-2.5 w-4 h-4 text-muted-foreground" />
-            <Input placeholder="Buscar: ansiedad, duelo, límites..." value={q} onChange={e => setQ(e.target.value)} className="pl-9" />
-          </div>
-          <div className="flex gap-1.5 flex-wrap">
-            {CATS.map(c => (
-              <Badge key={c} variant={cat === c ? 'default' : 'outline'} className="cursor-pointer rounded-full" onClick={() => setCat(c)}>{c}</Badge>
-            ))}
-          </div>
-        </div>
-
-        <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 mt-8">
-          {featured.map(l => (
-            <Card key={l.id} className="hover:border-primary/30 transition-colors cursor-pointer group" onClick={() => setOpen(l)}>
-              <CardHeader className="pb-2">
-                <div className="flex items-center justify-between">
-                  <Badge variant="secondary" className="text-[10px]">{l.cat}</Badge>
-                  <span className="text-xs text-muted-foreground">{String(l.id).padStart(2,'0')}</span>
-                </div>
-                <CardTitle className="font-display text-base leading-tight group-hover:text-primary">{l.titulo}</CardTitle>
-                <CardDescription className="text-xs">{l.desc}</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="flex items-center gap-2 text-xs text-primary"><Play className="w-3 h-3" /> Escuchar 2 min</div>
-              </CardContent>
-            </Card>
+        <div className="mt-8 flex flex-wrap items-center gap-x-6 gap-y-2 border-b border-border">
+          {CATS.map((c) => (
+            <button
+              key={c}
+              onClick={() => setCat(c)}
+              className={`-mb-px border-b-2 pb-2 text-xs uppercase tracking-[0.15em] transition-colors ${
+                cat === c
+                  ? 'border-primary text-foreground'
+                  : 'border-transparent text-muted-foreground hover:text-foreground'
+              }`}
+            >
+              {c}
+            </button>
           ))}
+          <span className="ml-auto pb-2 text-xs text-muted-foreground">{filtered.length} títulos</span>
         </div>
 
-        {filtered.length > 6 && <p className="text-center text-xs text-muted-foreground mt-4">{filtered.length - 6} más en esta categoría — ajusta búsqueda</p>}
+        <Carousel opts={{ align: 'start' }} className="mt-8 w-full">
+          <CarouselContent className="-ml-4">
+            {filtered.map((l) => (
+              <CarouselItem key={l.id} className="basis-[80%] pl-4 sm:basis-1/2 lg:basis-1/3">
+                <button
+                  onClick={() => setOpen(l)}
+                  className="group flex h-full w-full flex-col text-left"
+                >
+                  <div className="relative flex aspect-[4/3] items-center justify-center overflow-hidden rounded-2xl border border-border bg-[#0e0e10]">
+                    <span className="font-display text-6xl text-[#efe9df]/10 transition-colors group-hover:text-primary/30">
+                      {String(l.id).padStart(2, '0')}
+                    </span>
+                    <span className="absolute inset-0 flex items-center justify-center bg-[#08080a]/60 opacity-0 backdrop-blur-sm transition-opacity group-hover:opacity-100">
+                      <span className="inline-flex items-center gap-2 rounded-full bg-primary px-4 py-2 text-xs font-medium text-primary-foreground">
+                        <Play className="h-3 w-3" /> Escuchar 2 min
+                      </span>
+                    </span>
+                    <span className="absolute left-3 top-3 text-[10px] uppercase tracking-[0.2em] text-[#efe9df]/70">
+                      {l.cat}
+                    </span>
+                  </div>
+                  <h3 className="mt-4 font-display text-lg leading-tight transition-colors group-hover:text-primary">
+                    {l.titulo}
+                  </h3>
+                  <p className="mt-1 line-clamp-2 text-xs text-muted-foreground">{l.desc}</p>
+                </button>
+              </CarouselItem>
+            ))}
+          </CarouselContent>
+          <CarouselPrevious className="hidden lg:flex" />
+          <CarouselNext className="hidden lg:flex" />
+        </Carousel>
 
-        <div className="mt-8 text-center">
-          <Button asChild size="lg" className="rounded-full px-8">
-            <a href={HOTMART.audiobooks || '#'} target="_blank" rel="noreferrer">QUIERO LOS 21 AUDIOLIBROS — HOTMART</a>
-          </Button>
-          <p className="text-xs text-muted-foreground mt-2">Acceso inmediato · escucha offline</p>
+        {filtered.length === 0 && (
+          <p className="mt-8 text-sm text-muted-foreground">
+            Sin resultados — prueba otra búsqueda o categoría.
+          </p>
+        )}
+
+        <div className="mt-10 flex flex-col items-start justify-between gap-4 rounded-2xl border border-border p-6 sm:flex-row sm:items-center">
+          <div>
+            <p className="text-sm font-medium">¿Quieres los 21 completos?</p>
+            <p className="text-xs text-muted-foreground">Acceso inmediato · escucha offline · Hotmart</p>
+          </div>
+          <a
+            href={HOTMART.audiobooks || WA('Hola JR, quiero los 21 audiolibros')}
+            target="_blank"
+            rel="noreferrer"
+            className="inline-flex h-11 items-center justify-center rounded-full bg-primary px-7 text-sm font-medium text-primary-foreground transition-opacity hover:opacity-90"
+          >
+            QUIERO LOS 21
+          </a>
         </div>
-
-        <Dialog open={!!open} onOpenChange={() => setOpen(null)}>
-          <DialogContent>
-            <DialogHeader>
-              <DialogTitle className="font-display">{open?.titulo}</DialogTitle>
-              <DialogDescription>{open?.cat} · {open?.desc}</DialogDescription>
-            </DialogHeader>
-            <div className="aspect-video bg-muted rounded-lg flex items-center justify-center text-muted-foreground">
-              <Play className="w-8 h-8" /> <span className="ml-2 text-sm">Preview 2 min — próximamente</span>
-            </div>
-          </DialogContent>
-        </Dialog>
       </div>
+
+      <Dialog open={!!open} onOpenChange={() => setOpen(null)}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle className="font-display text-xl">{open?.titulo}</DialogTitle>
+            <DialogDescription>
+              {open?.cat} · {open?.desc}
+            </DialogDescription>
+          </DialogHeader>
+          <div className="flex aspect-video flex-col items-center justify-center gap-3 rounded-xl border border-border">
+            <div className="flex h-12 w-12 items-center justify-center rounded-full bg-primary text-primary-foreground">
+              <Play className="ml-0.5 h-5 w-5" />
+            </div>
+            <p className="text-sm text-muted-foreground">Preview 2 min — próximamente</p>
+          </div>
+        </DialogContent>
+      </Dialog>
     </section>
   )
 }

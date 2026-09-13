@@ -1,71 +1,132 @@
 import { useState } from 'react'
-import { Card, CardHeader, CardTitle, CardContent, CardFooter } from '@/components/ui/card'
+import { Card, CardContent } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
-import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
-import { Label } from '@/components/ui/label'
+import {
+  Questionnaire,
+  QuestionnaireActions,
+  QuestionnaireChoice,
+  QuestionnaireChoices,
+  QuestionnaireDescription,
+  QuestionnaireError,
+  QuestionnaireItem,
+  QuestionnaireNext,
+  QuestionnairePrevious,
+  QuestionnaireProgress,
+  QuestionnaireSubmit,
+  QuestionnaireTitle,
+} from '@/components/ui/questionnaire'
 import { WHATSAPP_LINK } from '../content/site'
-import { ArrowRight } from 'lucide-react'
 
-type Camino = 'wakeup' | 'sanacion' | 'ayahuasca' | null
+const items = [
+  {
+    name: 'buscas',
+    required: true,
+    prompt: '¿Qué buscas ahora?',
+    description: 'Elige la opción que más resuena contigo.',
+    choices: [
+      { value: 'proceso', label: 'Quiero un proceso completo y sostenido (4 meses)' },
+      { value: 'puntual', label: 'Quiero trabajar un tema puntual en 1 sesión' },
+      { value: 'experiencia', label: 'Quiero una experiencia intensiva de exploración' },
+    ],
+  },
+  {
+    name: 'acompanamiento',
+    required: true,
+    prompt: '¿Cómo prefieres el acompañamiento?',
+    description: 'Esto nos ayuda a recomendarte el camino adecuado.',
+    choices: [
+      { value: 'acompanado', label: 'Acompañamiento continuo + comunidad' },
+      { value: 'puntual2', label: 'Solo sesión virtual o presencial' },
+      { value: 'intensivo', label: 'Inmersión con preparación e integración' },
+    ],
+  },
+] as const
+
+type Camino = 'wakeup' | 'sanacion' | 'ayahuasca'
 
 export function Quiz() {
-  const [q1, setQ1] = useState<string>('')
-  const [q2, setQ2] = useState<string>('')
-  const [result, setResult] = useState<Camino>(null)
+  const [result, setResult] = useState<Camino | null>(null)
 
-  const recommend = () => {
-    if (q1 === 'proceso') setResult('wakeup')
-    else if (q1 === 'puntual') setResult('sanacion')
-    else if (q1 === 'experiencia') setResult('ayahuasca')
-    else if (q2 === 'intensivo') setResult('ayahuasca')
-    else if (q2 === 'acompanado') setResult('wakeup')
-    else setResult('sanacion')
-  }
-
-  const waText: Record<string, string> = {
+  const waText: Record<Camino, string> = {
     wakeup: 'Hola JR, hice el quiz y me recomendaron WAKE UP (4 meses). Quisiera información.',
     sanacion: 'Hola JR, hice el quiz y me recomendaron Sesión de Sanación Emocional. Quisiera reservar.',
     ayahuasca: 'Hola JR, hice el quiz y me recomendaron Terapia del Caos + Ayahuasca. Quisiera información sobre criterios de seguridad.',
   }
 
-  return (
-    <section className="py-12 px-5 lg:px-8 bg-muted/20">
-      <div className="max-w-3xl mx-auto">
-        <Card className="border-border">
-          <CardHeader className="text-center">
-            <CardTitle className="font-display text-xl">¿No sabes por dónde empezar?</CardTitle>
-            <p className="text-sm text-muted-foreground">2 preguntas → te digo qué camino va contigo</p>
-          </CardHeader>
-          <CardContent className="space-y-6">
-            <div className="space-y-3">
-              <Label className="text-sm font-medium">1. ¿Qué buscas ahora?</Label>
-              <RadioGroup value={q1} onValueChange={setQ1} className="gap-2">
-                <div className="flex items-center space-x-2 rounded-lg border p-3 hover:bg-accent"><RadioGroupItem value="proceso" id="q1a" /><Label htmlFor="q1a" className="flex-1 cursor-pointer">Quiero un proceso completo y sostenido (4 meses)</Label></div>
-                <div className="flex items-center space-x-2 rounded-lg border p-3 hover:bg-accent"><RadioGroupItem value="puntual" id="q1b" /><Label htmlFor="q1b" className="flex-1 cursor-pointer">Quiero trabajar un tema puntual en 1 sesión</Label></div>
-                <div className="flex items-center space-x-2 rounded-lg border p-3 hover:bg-accent"><RadioGroupItem value="experiencia" id="q1c" /><Label htmlFor="q1c" className="flex-1 cursor-pointer">Quiero una experiencia intensiva de exploración</Label></div>
-              </RadioGroup>
-            </div>
-            <div className="space-y-3">
-              <Label className="text-sm font-medium">2. ¿Cómo prefieres el acompañamiento?</Label>
-              <RadioGroup value={q2} onValueChange={setQ2} className="gap-2">
-                <div className="flex items-center space-x-2 rounded-lg border p-3 hover:bg-accent"><RadioGroupItem value="acompanado" id="q2a" /><Label htmlFor="q2a" className="flex-1 cursor-pointer">Acompañamiento continuo + comunidad</Label></div>
-                <div className="flex items-center space-x-2 rounded-lg border p-3 hover:bg-accent"><RadioGroupItem value="puntual2" id="q2b" /><Label htmlFor="q2b" className="flex-1 cursor-pointer">Solo sesión virtual o presencial</Label></div>
-                <div className="flex items-center space-x-2 rounded-lg border p-3 hover:bg-accent"><RadioGroupItem value="intensivo" id="q2c" /><Label htmlFor="q2c" className="flex-1 cursor-pointer">Inmersión con preparación e integración</Label></div>
-              </RadioGroup>
-            </div>
-            {result && (
-              <div className="rounded-xl bg-primary/10 border border-primary/20 p-4 text-center">
-                <p className="text-sm text-muted-foreground">Te recomiendo</p>
-                <p className="font-display text-lg text-primary mt-1">{result === 'wakeup' ? 'WAKE UP® — 4 meses' : result === 'sanacion' ? 'Sesión de Sanación' : 'Terapia del Caos + Ayahuasca'}</p>
-                <Button asChild className="mt-3 rounded-full w-full sm:w-auto">
-                  <a href={WHATSAPP_LINK + '?text=' + encodeURIComponent(waText[result])} target="_blank" rel="noreferrer">Hablar por WhatsApp <ArrowRight className="w-4 h-4 ml-1" /></a>
+  function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault()
+    const fd = new FormData(e.currentTarget)
+    const buscas = fd.get('buscas') as string | null
+    const acomp = fd.get('acompanamiento') as string | null
+    let r: Camino = 'sanacion'
+    if (buscas === 'proceso') r = 'wakeup'
+    else if (buscas === 'puntual') r = 'sanacion'
+    else if (buscas === 'experiencia') r = 'ayahuasca'
+    else if (acomp === 'intensivo') r = 'ayahuasca'
+    else if (acomp === 'acompanado') r = 'wakeup'
+    setResult(r)
+  }
+
+  if (result) {
+    return (
+      <section className="py-16 px-5 lg:px-8 bg-muted/20 view-animate-[--quiz] animate-slide-in-bottom animate-range-[entry_5%_cover_15%]">
+        <div className="max-w-2xl mx-auto">
+          <Card className="border-border overflow-hidden">
+            <CardContent className="pt-6">
+              <div className="rounded-xl border p-6 text-center">
+                <p className="text-xs tracking-[0.2em] text-muted-foreground">TE RECOMIENDO</p>
+                <p className="font-display text-xl lg:text-2xl text-foreground mt-2">
+                  {result === 'wakeup' ? 'WAKE UP® — 4 meses' : result === 'sanacion' ? 'Sesión de Sanación' : 'Terapia del Caos + Ayahuasca'}
+                </p>
+                <p className="text-sm text-muted-foreground mt-2 max-w-md mx-auto">
+                  {result === 'wakeup' ? 'Proceso sostenido con mentoría 24/7 y comunidad.' : result === 'sanacion' ? '1 sesión para trabajar un tema concreto.' : 'Experiencia intensiva con evaluación previa e integración.'}
+                </p>
+                <Button asChild className="mt-4 rounded-full">
+                  <a href={WHATSAPP_LINK + '?text=' + encodeURIComponent(waText[result])} target="_blank" rel="noreferrer">Hablar por WhatsApp</a>
                 </Button>
               </div>
-            )}
-          </CardContent>
-          <CardFooter className="justify-center">
-            <Button onClick={recommend} disabled={!q1 || !q2} className="rounded-full px-8">Ver recomendación</Button>
-          </CardFooter>
+              <div className="flex justify-center gap-3 mt-6">
+                <Button variant="outline" className="rounded-full" onClick={() => setResult(null)}>Repetir quiz</Button>
+                <Button variant="ghost" className="rounded-full" onClick={() => setResult(null)}>Volver</Button>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+      </section>
+    )
+  }
+
+  return (
+    <section className="py-16 px-5 lg:px-8 bg-muted/20">
+      <div className="max-w-2xl mx-auto">
+        <Card className="border-border p-6">
+          <div className="text-center mb-4">
+            <p className="text-[11px] tracking-[0.2em] text-muted-foreground">QUIZ · 30 SEG</p>
+            <h2 className="font-display text-xl lg:text-2xl mt-1">¿No sabes por dónde empezar?</h2>
+            <p className="text-sm text-muted-foreground">2 preguntas → te digo qué camino va contigo</p>
+          </div>
+          <Questionnaire items={items} onSubmit={handleSubmit}>
+            <QuestionnaireProgress />
+            {items.map((q) => (
+              <QuestionnaireItem key={q.name} name={q.name} required={q.required}>
+                <QuestionnaireTitle>{q.prompt}</QuestionnaireTitle>
+                <QuestionnaireDescription>{q.description}</QuestionnaireDescription>
+                <QuestionnaireChoices>
+                  {q.choices.map((c) => (
+                    <QuestionnaireChoice key={c.value} value={c.value}>
+                      <span className="font-medium">{c.label}</span>
+                    </QuestionnaireChoice>
+                  ))}
+                </QuestionnaireChoices>
+                <QuestionnaireError />
+              </QuestionnaireItem>
+            ))}
+            <QuestionnaireActions>
+              <QuestionnairePrevious>Anterior</QuestionnairePrevious>
+              <QuestionnaireNext>Siguiente</QuestionnaireNext>
+              <QuestionnaireSubmit>Ver recomendación</QuestionnaireSubmit>
+            </QuestionnaireActions>
+          </Questionnaire>
         </Card>
       </div>
     </section>
