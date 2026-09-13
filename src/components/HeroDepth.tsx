@@ -1,27 +1,32 @@
-import { useEffect, useRef } from 'react'
+import { useEffect, useImperativeHandle, useRef } from 'react'
+import type { Ref } from 'react'
 import * as THREE from 'three'
+
+export type HeroDepthHandle = { setProgress: (p: number) => void }
 
 type Props = {
   src: string
   /** Intensidad del parallax (0-1). */
   strength?: number
   className?: string
+  ref?: Ref<HeroDepthHandle>
 }
 
 /**
- * Hero con parallax de profundidad 2.5D en WebGL.
- * Usa la imagen como textura y un "depth" procedural (abajo = cerca, arriba = lejos,
- * modulado por luminancia) para desplazar los píxeles según el mouse. La neblina y el
- * primer plano ganan volumen sin necesitar un mapa de profundidad real.
+ * Hero con parallax de profundidad 2.5D en WebGL, dirigido por scroll.
+ * `setProgress(0..1)` empuja la "cámara" por la niebla y renderiza un solo
+ * frame por actualización (idle = 0 frames).
  */
-export function HeroDepth({ src, strength = 0.16, className }: Props) {
+export function HeroDepth({ src, strength = 0.16, className, ref }: Props) {
   const host = useRef<HTMLDivElement>(null)
+  const progress = useRef<(p: number) => void>(() => {})
+
+  useImperativeHandle(ref, () => ({ setProgress: (p) => progress.current(p) }), [])
 
   useEffect(() => {
     const el = host.current
     if (!el) return
 
-    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
     let renderer: THREE.WebGLRenderer | null = null
     let raf = 0
     let disposed = false
@@ -44,8 +49,7 @@ export function HeroDepth({ src, strength = 0.16, className }: Props) {
 
     const uniforms = {
       tDiffuse: { value: null as THREE.Texture | null },
-      uMouse: { value: new THREE.Vector2(0, 0) },
-      uTime: { value: 0 },
+      uProgress: { value: 0 },
       uStrength: { value: strength },
       uImgAspect: { value: 1.5 },
       uViewAspect: { value: 1.5 },
@@ -63,8 +67,7 @@ export function HeroDepth({ src, strength = 0.16, className }: Props) {
       fragmentShader: /* glsl */ `
         precision highp float;
         uniform sampler2D tDiffuse;
-        uniform vec2 uMouse;
-        uniform float uTime;
+        uniform float uProgress;
         uniform float uStrength;
         uniform float uImgAspect;
         uniform float uViewAspect;
@@ -83,15 +86,14 @@ export function HeroDepth({ src, strength = 0.16, className }: Props) {
           float lum = dot(texture2D(tDiffuse, base).rgb, vec3(0.299, 0.587, 0.114));
           // profundidad: fondo (arriba/niebla) lejos, primer plano (abajo) cerca
           float depth = clamp(0.9 - uv.y * 0.95 + (1.0 - lum) * 0.3, 0.0, 1.0);
-          // overscan para que el desplazamiento no muestre bordes
-          float zoom = 1.0 + uStrength * 1.35;
+          // cámara: zoom-in + deriva vertical según el scroll
+          float zoom = 1.0 + uStrength * 1.35 + uProgress * 0.30;
           vec2 p = (uv - 0.5) * zoom + 0.5;
-          vec2 offset = uMouse * uStrength * (depth - 0.4);
-          offset += vec2(sin(uTime * 0.12), cos(uTime * 0.09)) * 0.006 * depth;
+          vec2 offset = vec2(0.0, (0.5 - uProgress) * 0.07) * depth;
           vec2 puv = coverUv(p - offset);
           vec4 c = texture2D(tDiffuse, puv);
           float vig = smoothstep(1.35, 0.2, length((uv - 0.5) * vec2(1.0, 0.9)));
-          c.rgb *= mix(0.72, 1.05, vig);
+          c.rgb *= mix(0.72 + uProgress * 0.10, 1.05, vig);
           gl_FragColor = c;
         }
       `,
@@ -100,44 +102,36 @@ export function HeroDepth({ src, strength = 0.16, className }: Props) {
     const mesh = new THREE.Mesh(new THREE.PlaneGeometry(2, 2), material)
     scene.add(mesh)
 
-    // Motas atmosféricas: hacen visible el parallax (la foto es neblina uniforme).
+    // Motas atmosféricas: hacen visible la profundidad sobre la niebla.
     const COUNT = 150
     const pos = new Float32Array(COUNT * 3)
     const depthAttr = new Float32Array(COUNT)
-    const seedAttr = new Float32Array(COUNT)
     for (let i = 0; i < COUNT; i++) {
       pos[i * 3] = Math.random() * 2 - 1
       pos[i * 3 + 1] = Math.random() * 2 - 1
       depthAttr[i] = Math.random()
-      seedAttr[i] = Math.random()
     }
     const pointsGeo = new THREE.BufferGeometry()
     pointsGeo.setAttribute('position', new THREE.BufferAttribute(pos, 3))
     pointsGeo.setAttribute('aDepth', new THREE.BufferAttribute(depthAttr, 1))
-    pointsGeo.setAttribute('aSeed', new THREE.BufferAttribute(seedAttr, 1))
     const pointsMat = new THREE.ShaderMaterial({
       transparent: true,
       depthWrite: false,
       blending: THREE.AdditiveBlending,
       uniforms: {
-        uMouse: uniforms.uMouse,
-        uTime: uniforms.uTime,
+        uProgress: uniforms.uProgress,
         uStrength: { value: strength * 2.4 },
         uPixelRatio: { value: Math.min(window.devicePixelRatio || 1, 1) },
       },
       vertexShader: /* glsl */ `
-        uniform vec2 uMouse;
-        uniform float uTime;
+        uniform float uProgress;
         uniform float uStrength;
         uniform float uPixelRatio;
         attribute float aDepth;
-        attribute float aSeed;
         varying float vAlpha;
         void main() {
           vec3 p = position;
-          p.x += sin(uTime * 0.1 + aSeed * 6.283) * 0.02;
-          p.y += cos(uTime * 0.08 + aSeed * 6.283) * 0.02;
-          p.xy += uMouse * uStrength * (aDepth);
+          p.xy += vec2(0.0, (0.5 - uProgress) * 0.14) * aDepth;
           gl_Position = vec4(p.xy, 0.0, 1.0);
           gl_PointSize = (1.5 + aDepth * 3.5) * uPixelRatio;
           vAlpha = 0.12 + aDepth * 0.38;
@@ -156,6 +150,25 @@ export function HeroDepth({ src, strength = 0.16, className }: Props) {
     const points = new THREE.Points(pointsGeo, pointsMat)
     scene.add(points)
 
+    let scheduled = false
+    const render = () => {
+      if (disposed || !renderer) return
+      renderer.render(scene, camera)
+    }
+    const requestRender = () => {
+      if (scheduled) return
+      scheduled = true
+      raf = requestAnimationFrame(() => {
+        scheduled = false
+        render()
+      })
+    }
+
+    progress.current = (p) => {
+      uniforms.uProgress.value = p
+      requestRender()
+    }
+
     const loader = new THREE.TextureLoader()
     loader.load(src, (tex) => {
       if (disposed) return
@@ -164,58 +177,8 @@ export function HeroDepth({ src, strength = 0.16, className }: Props) {
       if (tex.image?.width && tex.image?.height) {
         uniforms.uImgAspect.value = tex.image.width / tex.image.height
       }
-      renderer?.render(scene, camera)
+      render()
     })
-
-    // Render bajo demanda: un frame por movimiento, con amortiguación breve que
-    // se detiene al converger. Sin loop perpetuo → idle = 0 frames.
-    let visible = true
-    let scheduled = false
-    let running = false
-    let last = 0
-
-    const target = new THREE.Vector2(0, 0)
-
-    const render = () => {
-      if (disposed || !renderer) return
-      renderer.render(scene, camera)
-    }
-
-    const tick = () => {
-      scheduled = false
-      if (!renderer || !visible) {
-        running = false
-        return
-      }
-      const now = performance.now()
-      uniforms.uTime.value += Math.min((now - last) / 1000, 0.05)
-      last = now
-      uniforms.uMouse.value.lerp(target, 0.06)
-      renderer.render(scene, camera)
-      if (uniforms.uMouse.value.distanceToSquared(target) > 1e-6) {
-        scheduled = true
-        raf = requestAnimationFrame(tick)
-      } else {
-        running = false
-      }
-    }
-
-    const requestRender = () => {
-      if (scheduled || !visible) return
-      if (!running) {
-        last = performance.now()
-        running = true
-      }
-      scheduled = true
-      raf = requestAnimationFrame(tick)
-    }
-
-    const onPointer = (e: PointerEvent) => {
-      if (!visible) return
-      const r = el.getBoundingClientRect()
-      target.set(((e.clientX - r.left) / r.width - 0.5) * 2, ((e.clientY - r.top) / r.height - 0.5) * 2)
-      requestRender()
-    }
 
     const resize = () => {
       if (!renderer || !el) return
@@ -225,28 +188,13 @@ export function HeroDepth({ src, strength = 0.16, className }: Props) {
       uniforms.uViewAspect.value = w / h
       render()
     }
-
-    const io = new IntersectionObserver(
-      ([entry]) => {
-        visible = entry.isIntersecting
-        if (visible) requestRender()
-      },
-      { threshold: 0 },
-    )
-
-    if (!reduced) {
-      window.addEventListener('resize', resize)
-      window.addEventListener('pointermove', onPointer, { passive: true })
-      io.observe(el)
-      resize()
-    }
+    window.addEventListener('resize', resize)
+    resize()
 
     return () => {
       disposed = true
       cancelAnimationFrame(raf)
-      io.disconnect()
       window.removeEventListener('resize', resize)
-      window.removeEventListener('pointermove', onPointer)
       material.dispose()
       mesh.geometry.dispose()
       pointsMat.dispose()
