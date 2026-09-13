@@ -94,16 +94,16 @@ export function Audiolibros() {
                   onClick={() => setOpen(l)}
                   className="group flex h-full w-full flex-col text-left"
                 >
-                  <div className="relative flex aspect-[4/3] items-center justify-center overflow-hidden rounded-2xl border border-border bg-[#0e0e10]">
-                    <span className="font-display text-6xl text-[#efe9df]/10 transition-colors group-hover:text-primary/30">
+                  <div className="relative flex aspect-[4/3] items-center justify-center overflow-hidden rounded-2xl border border-border bg-muted">
+                    <span className="font-display text-6xl text-muted-foreground/20 transition-colors group-hover:text-primary/40">
                       {String(l.id).padStart(2, '0')}
                     </span>
-                    <span className="absolute inset-0 flex items-center justify-center bg-[#08080a]/60 opacity-0 backdrop-blur-sm transition-opacity group-hover:opacity-100">
+                    <span className="absolute inset-0 flex items-center justify-center bg-background/60 opacity-0 backdrop-blur-sm transition-opacity group-hover:opacity-100">
                       <span className="inline-flex items-center gap-2 rounded-full bg-primary px-4 py-2 text-xs font-medium text-primary-foreground">
                         <Play className="h-3 w-3" /> Escuchar 2 min
                       </span>
                     </span>
-                    <span className="absolute left-3 top-3 text-[10px] uppercase tracking-[0.2em] text-[#efe9df]/70">
+                    <span className="absolute left-3 top-3 text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
                       {l.cat}
                     </span>
                   </div>

@@ -10,14 +10,16 @@ import {
   SheetTitle,
 } from '@/components/ui/sheet'
 import { Separator } from '@/components/ui/separator'
-import { Menu } from 'lucide-react'
+import { Menu, Moon, Sun } from 'lucide-react'
 import { scrollTo } from '@/lib/lenis'
 import { useSite } from '../lib/site'
+import { useTheme } from '../lib/theme'
 
 export function Navbar() {
   const [active, setActive] = useState('inicio')
   const [open, setOpen] = useState(false)
   const { content } = useSite()
+  const { toggle } = useTheme()
 
   useEffect(() => {
     const onScroll = () => {
@@ -38,13 +40,20 @@ export function Navbar() {
     setOpen(false)
   }
 
+  const themeButton = (className: string) => (
+    <Button variant="ghost" size="icon" aria-label="Cambiar tema" onClick={toggle} className={className}>
+      <Sun className="hidden dark:block" />
+      <Moon className="block dark:hidden" />
+    </Button>
+  )
+
   return (
     <header className="fixed top-4 left-1/2 -translate-x-1/2 z-40 w-[calc(100%-1rem)] max-w-4xl">
-      <div className="flex items-center justify-between gap-2 px-2 py-2 rounded-full bg-[#101012]/70 backdrop-blur-xl border border-[#efe9df]/12 shadow-2xl shadow-black/40">
+      <div className="flex items-center justify-between gap-2 px-2 py-2 rounded-full bg-background/70 backdrop-blur-xl border border-border shadow-2xl shadow-black/20">
         <a
           href="#inicio"
           onClick={(e) => handleNav(e, 'inicio')}
-          className="font-display text-[#efe9df] tracking-[0.16em] text-xs sm:text-sm whitespace-nowrap px-4 shrink-0"
+          className="font-display text-foreground tracking-[0.16em] text-xs sm:text-sm whitespace-nowrap px-4 shrink-0"
         >
           {content['brand.name'] ?? 'TERAPEUTA DEL CAOS'}
         </a>
@@ -58,7 +67,7 @@ export function Navbar() {
               className={`px-3 py-1.5 rounded-full text-xs tracking-wide transition-colors ${
                 active === n.id
                   ? 'bg-primary text-primary-foreground'
-                  : 'text-[#efe9df]/60 hover:text-[#efe9df] hover:bg-[#efe9df]/10'
+                  : 'text-foreground/60 hover:text-foreground hover:bg-foreground/10'
               }`}
             >
               {n.label}
@@ -66,7 +75,8 @@ export function Navbar() {
           ))}
         </nav>
 
-        <div className="hidden lg:flex items-center gap-2 shrink-0 pr-1">
+        <div className="hidden lg:flex items-center gap-1 shrink-0 pr-1">
+          {themeButton('rounded-full text-foreground hover:bg-foreground/10')}
           <Button asChild size="sm" className="rounded-full font-medium shadow-md">
             <a href={WHATSAPP_LINK} target="_blank" rel="noreferrer">
               HABLAR CON JR
@@ -75,12 +85,13 @@ export function Navbar() {
         </div>
 
         <div className="flex lg:hidden items-center gap-1 shrink-0 pr-1">
+          {themeButton('rounded-full h-9 w-9 text-foreground hover:bg-foreground/10')}
           <Sheet open={open} onOpenChange={setOpen}>
             <SheetTrigger asChild>
               <Button
                 variant="ghost"
                 size="icon"
-                className="rounded-full h-9 w-9 text-[#efe9df] hover:bg-[#efe9df]/10 hover:text-[#efe9df]"
+                className="rounded-full h-9 w-9 text-foreground hover:bg-foreground/10 hover:text-foreground"
               >
                 <Menu className="w-5 h-5" />
               </Button>
