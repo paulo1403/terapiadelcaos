@@ -56,7 +56,11 @@ export default function App() {
           if (!Section) return null
           return (
             <Suspense key={section.id} fallback={null}>
-              <Section />
+              {section.id === 'hero' ? <Section /> : (
+                <div className="reveal">
+                  <Section />
+                </div>
+              )}
             </Suspense>
           )
         })}

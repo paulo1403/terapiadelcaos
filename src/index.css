@@ -209,3 +209,119 @@
   }
 }
 
+/* ===== Sistema de movimiento (CSS nativo) ===== */
+:root {
+  --ease-out: linear(0, 0.25 18%, 0.6 42%, 0.85 68%, 0.96 84%, 1);
+  --ease-spring: linear(0, 0.32 16%, 0.88 42%, 1.06 62%, 0.99 82%, 1);
+}
+
+h1,
+h2,
+h3 {
+  text-wrap: balance;
+}
+p {
+  text-wrap: pretty;
+}
+
+/* Reveal al entrar en pantalla, sin JS */
+@keyframes reveal-up {
+  from {
+    opacity: 0;
+    transform: translateY(42px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: view()) {
+    .reveal {
+      animation: reveal-up linear both;
+      animation-timeline: view();
+      animation-range: entry 0% entry 42%;
+    }
+  }
+}
+
+/* Pista de scroll del hero */
+.hero-cue {
+  position: absolute;
+  left: 50%;
+  bottom: 1.75rem;
+  translate: -50% 0;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  color: rgba(239, 233, 223, 0.6);
+  font-size: 10px;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+}
+.hero-cue::after {
+  content: '';
+  width: 1px;
+  height: 38px;
+  background: linear-gradient(to bottom, rgba(239, 233, 223, 0.6), transparent);
+}
+@media (prefers-reduced-motion: no-preference) {
+  .hero-cue::after {
+    animation: cue 2.4s var(--ease-out) infinite;
+    transform-origin: top;
+  }
+}
+@keyframes cue {
+  0% {
+    transform: scaleY(0.2);
+    opacity: 0;
+  }
+  40% {
+    transform: scaleY(1);
+    opacity: 1;
+  }
+  100% {
+    transform: scaleY(0.2);
+    opacity: 0;
+  }
+}
+
+/* Metadatos del hero */
+.hero-stats {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1.5rem;
+}
+.hero-stat dt {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(1.75rem, 3vw, 2.5rem);
+  line-height: 1;
+  color: var(--primary);
+}
+.hero-stat dd {
+  margin: 0;
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(239, 233, 223, 0.55);
+}
+
+/* Utilidades modernas */
+.eyebrow-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  border-radius: 9999px;
+  border: 1px solid color-mix(in oklch, var(--primary) 35%, transparent);
+  background: color-mix(in oklch, var(--primary) 12%, transparent);
+  padding: 0.35rem 0.9rem;
+  font-size: 10px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: color-mix(in oklch, var(--primary) 75%, white);
+}
+
+
