@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { Play } from 'lucide-react'
 import { Dialog, DialogContent, DialogTitle } from '@/components/ui/dialog'
 import { useSite } from '../lib/site'
@@ -16,6 +16,16 @@ export function Testimonios() {
   const { content } = useSite()
   const [items, setItems] = useState<Testimonio[] | null>(null)
   const [open, setOpen] = useState<Testimonio | null>(null)
+  const videoRef = useRef<HTMLVideoElement>(null)
+
+  useEffect(() => {
+    const video = videoRef.current
+    if (!open || !video) return
+    video.play().catch(() => {
+      video.muted = true
+      video.play().catch(() => {})
+    })
+  }, [open])
 
   useEffect(() => {
     fetch('/api/testimonials')
@@ -74,6 +84,7 @@ export function Testimonios() {
           </DialogTitle>
           {open?.videoUrl && (
             <video
+              ref={videoRef}
               src={open.videoUrl}
               poster={open.posterUrl ?? undefined}
               controls
