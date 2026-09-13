@@ -77,6 +77,7 @@ export function Testimonios() {
               src={open.videoUrl}
               poster={open.posterUrl ?? undefined}
               controls
+              autoPlay
               preload="none"
               playsInline
               className="w-full rounded-lg"

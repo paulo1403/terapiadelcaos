@@ -402,3 +402,13 @@ p {
   z-index: -1;
   pointer-events: none;
 }
+
+/* Hero con curtains.js (efecto sutil; fallback = imagen) */
+.hero-media-host {
+  position: absolute;
+  inset: 0;
+}
+.hero-media-host.is-curtains .hero-media {
+  visibility: hidden;
+  animation: none;
+}

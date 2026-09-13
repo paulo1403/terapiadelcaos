@@ -21,6 +21,7 @@
     "@shadcn/react": "^0.3.0",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
+    "curtainsjs": "^8.1.6",
     "lucide-react": "^1.34.0",
     "ogl": "^1.0.11",
     "react": "^19.2.8",

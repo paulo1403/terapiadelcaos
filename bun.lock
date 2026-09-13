@@ -16,6 +16,7 @@
         "@shadcn/react": "^0.3.0",
         "class-variance-authority": "^0.7.1",
         "clsx": "^2.1.1",
+        "curtainsjs": "^8.1.6",
         "lucide-react": "^1.34.0",
         "ogl": "^1.0.11",
         "react": "^19.2.8",
@@ -367,6 +368,8 @@
     "convert-source-map": ["convert-source-map@2.0.0", "", {}, "sha512-Kvp459HrV2FEJ1CAsi1Ku+MY3kasH19TFykTz2xWmMeq6bk2NU3XXvfJ+Q61m0xktWwt+1HSYf3JZsTms3aRJg=="],
 
     "csstype": ["csstype@3.2.3", "", {}, "sha512-z1HGKcYy2xA8AGQfwrn0PAy+PB7X/GSj3UVJW9qKyn43xWa+gl5nXmU4qqLMRzWVLFC8KusUX8T/0kCiOYpAIQ=="],
+
+    "curtainsjs": ["curtainsjs@8.1.6", "", {}, "sha512-sdZtA4LrhR7f2Ty90j//cLyQYnZJu2MsfZ1EWKj9TpcvrvEBNrbG506oK6JmJCB0epD5kTFKNkyrGCjiZz7Caw=="],
 
     "debug": ["debug@4.4.3", "", { "dependencies": { "ms": "^2.1.3" }, "peerDependencies": { "supports-color": "*" }, "optionalPeers": ["supports-color"] }, "sha512-RGwwWnwQvkVfavKVt22FGLw+xYSdzARwm0ru6DhTVA3umU5hZc28V3kO4stgYryrTlLpuvgI9GiijltAjNbcqA=="],
 

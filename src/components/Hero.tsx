@@ -1,8 +1,7 @@
 import { WHATSAPP_LINK } from '../content/site'
 import { Button } from '@/components/ui/button'
 import { Dialog, DialogContent, DialogTrigger, DialogTitle } from '@/components/ui/dialog'
-import heroDesktop from '../assets/hero-immersive-desktop.png'
-import heroMobile from '../assets/hero-immersive-mobile.png'
+import { HeroMedia } from './HeroMedia'
 import { useSite } from '../lib/site'
 
 export function Hero() {
@@ -11,10 +10,7 @@ export function Hero() {
   return (
     <section id="inicio" className="hero">
       <div className="hero-stage">
-        <picture>
-          <source media="(max-width: 767px)" srcSet={heroMobile} />
-          <img src={heroDesktop} alt="" aria-hidden="true" className="hero-media" />
-        </picture>
+        <HeroMedia />
         <div className="hero-vignette" />
         <div className="hero-gradient" />
         <div className="hero-grain bg-grain" />
