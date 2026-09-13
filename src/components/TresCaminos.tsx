@@ -35,45 +35,37 @@ export function TresCaminos() {
   return (
     <section className="section">
       <div className="shell">
-        <div className="max-w-2xl">
+        <div className="section-head">
           <span className="eyebrow-pill">Elige tu puerta</span>
-          <h2 className="display mt-6 text-[clamp(2.4rem,6vw,4.5rem)]">
+          <h2 className="h2">
             Tres caminos.
             <br />
-            Un mismo <span className="text-primary">propósito.</span>
+            Un mismo <span className="block-accent">propósito.</span>
           </h2>
-          <p className="mt-5 max-w-xl text-sm leading-relaxed text-muted-foreground">
+          <p className="lead">
             Proceso completo, tema puntual o experiencia intensiva. Empieza donde estás.
           </p>
         </div>
 
-        <div className="grid-dim mt-14 grid gap-4 md:grid-cols-[1.35fr_1fr]">
+        <div className="caminos grid-dim">
           {CAMINOS.map((c, i) => {
             const featured = i === 0
             const inner = (
               <>
-                <div className="flex items-start justify-between gap-4">
-                  <span className="display text-5xl text-primary/45">{c.n}</span>
+                <div className="camino-top">
+                  <span className="camino-num">{c.n}</span>
                   <span className="badge">{c.tag}</span>
                 </div>
-                <h3 className="display mt-8 text-3xl leading-tight">{c.title}</h3>
-                <p className="mt-3 flex-1 text-sm leading-relaxed text-muted-foreground">{c.desc}</p>
-                <span
-                  className={`mt-8 inline-flex items-center gap-2 text-sm font-medium ${
-                    featured ? 'text-primary' : 'text-foreground'
-                  }`}
-                >
+                <h3 className="camino-title">{c.title}</h3>
+                <p className="camino-desc">{c.desc}</p>
+                <span className="camino-cta">
                   {c.cta}
                   <span aria-hidden="true">→</span>
                 </span>
               </>
             )
 
-            const classes = `card-hover flex flex-col rounded-3xl border p-8 text-left lg:p-10 ${
-              featured
-                ? 'border-primary/25 bg-[color-mix(in_oklch,var(--primary)_8%,var(--card))] md:row-span-2'
-                : 'border-border bg-card'
-            }`
+            const classes = `camino card-hover${featured ? ' featured' : ''}`
 
             if (i === 2) {
               return (
@@ -91,21 +83,14 @@ export function TresCaminos() {
           })}
         </div>
 
-        <p className="mt-6 text-xs tracking-wide text-muted-foreground">
-          Cupos limitados · recomendado para transformación sostenida.
-        </p>
+        <p className="caminos-note">Cupos limitados · recomendado para transformación sostenida.</p>
       </div>
 
       <Modal open={ayahuasca} onClose={() => setAyahuasca(false)} title="Evaluación previa">
-        <p className="text-sm text-muted-foreground">
+        <p className="body-sm">
           Requiere cuestionario y entrevista. No es para todos.
         </p>
-        <a
-          href={WA('Hola JR, info Ayahuasca')}
-          target="_blank"
-          rel="noreferrer"
-          className="btn btn-primary mt-5"
-        >
+        <a href={CAMINOS[2].href} target="_blank" rel="noreferrer" className="btn btn-primary mt-5">
           Hablar con JR
         </a>
       </Modal>

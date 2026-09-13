@@ -11,61 +11,54 @@ const PASOS = [
 export function Terapia() {
   return (
     <section id="terapia" className="section">
-      <div className="shell grid gap-14 lg:grid-cols-[1fr_1.05fr] lg:gap-20">
-        <div className="lg:sticky lg:top-28 lg:self-start">
+      <div className="shell terapia">
+        <div className="terapia-intro">
           <span className="eyebrow-pill">Terapia del Caos</span>
-          <h2 className="display mt-6 text-[clamp(2.8rem,8vw,6rem)]">
-            <span className="block text-lg uppercase tracking-[0.22em] text-muted-foreground sm:text-xl">
-              El caos no es tu enemigo.
-            </span>
-            <span className="mt-4 block text-primary">Es</span>
-            <span className="block">información.</span>
+          <h2 className="terapia-title">
+            <span className="terapia-kicker">El caos no es tu enemigo.</span>
+            <span className="block-accent">Es</span>
+            <span>información.</span>
           </h2>
-          <p className="mt-8 max-w-xl text-sm leading-relaxed text-muted-foreground lg:text-[15px]">
+          <p className="terapia-lead">
             Relaciones, pérdidas, crisis. Cuando todo se desordena, no siempre hay que escapar.
-            <span className="font-medium text-foreground"> A veces hay que atravesarlo — con presencia.</span>
+            <strong> A veces hay que atravesarlo — con presencia.</strong>
           </p>
-          <p className="mt-3 max-w-xl text-xs text-muted-foreground">
+          <p className="terapia-note">
             No estás solo en esto. Te acompaño a mirar el caos como proceso, no como falla.
           </p>
           <a
             href={WA('Hola JR, me interesa Terapia del Caos. Quiero atravesar mi proceso con acompañamiento.')}
             target="_blank"
             rel="noreferrer"
-            className="mt-8 inline-flex h-12 items-center rounded-full bg-primary px-8 text-sm font-medium text-primary-foreground transition-opacity hover:opacity-90"
+            className="btn btn-primary terapia-cta"
           >
             QUIERO ATRAVESARLO
           </a>
         </div>
 
-        <div className="lg:pt-4">
-          <div className="flex items-center gap-3">
-            <span className="text-[11px] uppercase tracking-[0.3em] text-muted-foreground">
-              Proceso en 5 pasos
-            </span>
-            <span className="h-px flex-1 bg-border" />
+        <div>
+          <div className="steps-head">
+            <span>Proceso en 5 pasos</span>
+            <span />
           </div>
 
-          <ol className="mt-2">
+          <ol>
             {PASOS.map((p, i) => (
               <li key={p.n}>
-                <div className="group flex items-baseline gap-6 py-6">
-                  <span className="display text-4xl leading-none text-primary/40 transition-colors group-hover:text-primary">
-                    {p.n}
-                  </span>
-                  <div className="min-w-0 flex-1">
-                    <h3 className="display text-2xl leading-none tracking-wide lg:text-3xl">{p.t}</h3>
-                    <p className="mt-2 text-sm text-muted-foreground">{p.d}</p>
+                <div className="step">
+                  <span className="step-num">{p.n}</span>
+                  <div>
+                    <h3 className="step-title">{p.t}</h3>
+                    <p className="step-desc">{p.d}</p>
                   </div>
                 </div>
-                {i < PASOS.length - 1 && <span className="hairline block" />}
+                {i < PASOS.length - 1 && <span className="hairline" />}
               </li>
             ))}
           </ol>
 
-          <p className="mt-8 text-xs text-muted-foreground">
-            No es un lineal perfecto. <span className="font-medium text-foreground">Es un espiral.</span>{' '}
-            Vuelves, pero más consciente.
+          <p className="steps-note">
+            No es un lineal perfecto. <strong>Es un espiral.</strong> Vuelves, pero más consciente.
           </p>
         </div>
       </div>

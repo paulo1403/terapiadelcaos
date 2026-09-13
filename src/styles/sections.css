@@ -1,0 +1,310 @@
+/* ===== Secciones (CSS propio, moderno) ===== */
+
+/* --- Hero: layout (la base hero-* vive en index.css) --- */
+.hero-copy {
+  position: relative;
+  z-index: 10;
+  margin-inline: auto;
+  width: 100%;
+  max-width: 72rem;
+  padding: 8rem 1.5rem 6rem;
+}
+@media (min-width: 1024px) {
+  .hero-copy {
+    padding: 8rem 2.5rem 7rem;
+  }
+}
+.hero-title {
+  margin-block-start: 1.5rem;
+  font-family: 'Cormorant Garamond', serif;
+  line-height: 0.84;
+  letter-spacing: -0.03em;
+  font-size: clamp(3.25rem, 12vw, 9rem);
+}
+.hero-tail {
+  margin-block-start: 3rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2.5rem;
+}
+@media (min-width: 1024px) {
+  .hero-tail {
+    flex-direction: row;
+    align-items: flex-end;
+    justify-content: space-between;
+  }
+}
+.hero-lead {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(1.5rem, 3vw, 1.875rem);
+  line-height: 1.25;
+}
+.hero-sub {
+  margin-block-start: 1rem;
+  max-width: 28rem;
+  font-size: 0.875rem;
+  line-height: 1.6;
+  color: color-mix(in oklch, #efe9df 72%, transparent);
+}
+.hero-ctas {
+  margin-block-start: 1.75rem;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1rem;
+}
+@media (min-width: 640px) {
+  .hero-ctas {
+    flex-direction: row;
+    align-items: center;
+  }
+}
+.hero-wa {
+  display: inline-block;
+  margin-block-start: 1rem;
+  font-size: 0.75rem;
+  color: color-mix(in oklch, #efe9df 72%, transparent);
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+.hero-wa:hover {
+  color: var(--primary);
+}
+.hero-stats {
+  width: 100%;
+  max-width: 22rem;
+}
+@media (min-width: 1024px) {
+  .hero-stats {
+    max-width: 20rem;
+    text-align: right;
+  }
+}
+
+/* --- Tres Caminos --- */
+.caminos {
+  display: grid;
+  gap: 1rem;
+  margin-block-start: 3.5rem;
+}
+@media (min-width: 768px) {
+  .caminos {
+    grid-template-columns: 1.35fr 1fr;
+  }
+}
+.camino {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--border);
+  border-radius: 1.5rem;
+  background: var(--card);
+  padding: 2rem;
+  text-align: left;
+  color: inherit;
+}
+@media (min-width: 1024px) {
+  .camino {
+    padding: 2.5rem;
+  }
+}
+.camino.featured {
+  border-color: color-mix(in oklch, var(--primary) 30%, transparent);
+  background: color-mix(in oklch, var(--primary) 8%, var(--card));
+}
+@media (min-width: 768px) {
+  .camino.featured {
+    grid-row: span 2;
+  }
+}
+.camino-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+}
+.camino-num {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 3rem;
+  line-height: 1;
+  color: color-mix(in oklch, var(--primary) 45%, transparent);
+}
+.camino-title {
+  margin-block-start: 2rem;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.875rem;
+  line-height: 1.1;
+}
+.camino-desc {
+  margin-block-start: 0.75rem;
+  flex: 1;
+  font-size: 0.875rem;
+  line-height: 1.6;
+  color: var(--muted-foreground);
+}
+.camino-cta {
+  margin-block-start: 2rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--foreground);
+}
+.camino.featured .camino-cta {
+  color: var(--primary);
+}
+.caminos-note {
+  margin-block-start: 1.5rem;
+  font-size: 0.75rem;
+  letter-spacing: 0.03em;
+  color: var(--muted-foreground);
+}
+
+/* --- Terapia --- */
+.terapia {
+  display: grid;
+  gap: 3.5rem;
+}
+@media (min-width: 1024px) {
+  .terapia {
+    grid-template-columns: 1fr 1.05fr;
+    gap: 5rem;
+  }
+}
+.terapia-intro {
+  align-self: start;
+}
+@media (min-width: 1024px) {
+  .terapia-intro {
+    position: sticky;
+    top: 7rem;
+  }
+}
+.terapia-title {
+  margin-block-start: 1.5rem;
+  font-family: 'Cormorant Garamond', serif;
+  line-height: 0.95;
+  letter-spacing: -0.02em;
+  font-size: clamp(2.8rem, 8vw, 6rem);
+}
+.terapia-kicker {
+  display: block;
+  font-size: 1.125rem;
+  text-transform: uppercase;
+  letter-spacing: 0.22em;
+  color: var(--muted-foreground);
+}
+.terapia-lead {
+  margin-block-start: 2rem;
+  max-width: 36rem;
+  font-size: 0.9375rem;
+  line-height: 1.7;
+  color: var(--muted-foreground);
+}
+.terapia-cta {
+  margin-block-start: 2rem;
+}
+.steps-head {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+.steps-head span:first-child {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.3em;
+  color: var(--muted-foreground);
+}
+.steps-head span:last-child {
+  flex: 1;
+  height: 1px;
+  background: var(--border);
+}
+.step {
+  display: flex;
+  align-items: baseline;
+  gap: 1.5rem;
+  padding-block: 1.5rem;
+}
+.step-num {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 2.25rem;
+  line-height: 1;
+  color: color-mix(in oklch, var(--primary) 45%, transparent);
+  transition: color 0.4s var(--ease-out);
+}
+.step:hover .step-num {
+  color: var(--primary);
+}
+.step-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.5rem;
+  line-height: 1;
+  letter-spacing: 0.02em;
+}
+@media (min-width: 1024px) {
+  .step-title {
+    font-size: 1.875rem;
+  }
+}
+.step-desc {
+  margin-block-start: 0.5rem;
+  font-size: 0.875rem;
+  color: var(--muted-foreground);
+}
+.steps-note {
+  margin-block-start: 2rem;
+  font-size: 0.75rem;
+  color: var(--muted-foreground);
+}
+
+/* --- Helpers de sección --- */
+.hero-dot {
+  display: inline-block;
+  width: 0.375rem;
+  height: 0.375rem;
+  border-radius: 9999px;
+  background: var(--primary);
+}
+.section-head {
+  max-width: 42rem;
+}
+.section-head-wide {
+  max-width: 48rem;
+}
+.h2 {
+  margin-block-start: 1.5rem;
+  font-family: 'Cormorant Garamond', serif;
+  line-height: 0.95;
+  letter-spacing: -0.02em;
+  font-size: clamp(2.4rem, 6vw, 4.5rem);
+}
+.h2-big {
+  font-size: clamp(2.6rem, 7vw, 5rem);
+}
+.h2-xl {
+  font-size: clamp(2.8rem, 8vw, 6rem);
+}
+.block-accent {
+  color: var(--primary);
+}
+
+.modal-media {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+  aspect-ratio: 16 / 9;
+}
+.modal-quote {
+  max-width: 28rem;
+  text-align: center;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.5rem;
+  line-height: 1.3;
+}
+.terapia-note {
+  margin-block-start: 1rem;
+  font-size: 0.75rem;
+  color: var(--muted-foreground);
+}

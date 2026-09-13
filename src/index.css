@@ -2,6 +2,7 @@
 @import './styles/system.css';
 @import './styles/components.css';
 @import './styles/shell.css';
+@import './styles/sections.css';
 
 @custom-variant dark (&:is(.dark *));
 
