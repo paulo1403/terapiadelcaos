@@ -13,6 +13,7 @@ export const DEFAULT_SECTIONS: SiteSection[] = [
   { id: 'audiolibros', label: 'Audiolibros', visible: true },
   { id: 'despertares', label: 'Despertares', visible: true },
   { id: 'medicina', label: 'Medicina ancestral', visible: true },
+  { id: 'testimonios', label: 'Testimonios', visible: true },
   { id: 'jr', label: 'JR Rivera', visible: true },
 ]
 

@@ -24,6 +24,9 @@ const Despertares = lazy(() =>
 const Medicina = lazy(() =>
   import('./components/Medicina').then((m) => ({ default: m.Medicina })),
 )
+const Testimonios = lazy(() =>
+  import('./components/Testimonios').then((m) => ({ default: m.Testimonios })),
+)
 const JR = lazy(() => import('./components/JR').then((m) => ({ default: m.JR })))
 
 const REGISTRY: Record<string, ComponentType> = {
@@ -36,6 +39,7 @@ const REGISTRY: Record<string, ComponentType> = {
   audiolibros: Audiolibros,
   despertares: Despertares,
   medicina: Medicina,
+  testimonios: Testimonios,
   jr: JR,
 }
 
