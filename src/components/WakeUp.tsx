@@ -33,36 +33,49 @@ const TIERS = [
 
 export function WakeUp() {
   return (
-    <section id="wakeup" className="relative px-6 py-20 lg:px-10 lg:py-28">
-      <div className="mx-auto max-w-6xl">
+    <section id="wakeup" className="section">
+      <div className="shell">
         <div className="max-w-3xl">
-          <p className="text-[11px] uppercase tracking-[0.3em] text-primary">Wake Up®</p>
-          <h2 className="mt-4 font-display text-[clamp(2.2rem,6vw,4.5rem)] leading-[0.92] tracking-[-0.02em]">
-            Autosanación emocional
-          </h2>
+          <span className="eyebrow-pill">Wake Up®</span>
+          <h2 className="display mt-6 text-[clamp(2.6rem,7vw,5rem)]">Autosanación emocional</h2>
           <p className="mt-5 max-w-2xl text-sm leading-relaxed text-muted-foreground lg:text-[15px]">
             Proceso estructurado para transformar desde adentro.
-            <span className="font-medium text-foreground"> Respiración, conciencia, integración.</span> No es teoría — es práctica sostenida.
+            <span className="font-medium text-foreground">
+              {' '}
+              Respiración, conciencia, integración.
+            </span>{' '}
+            No es teoría — es práctica sostenida.
           </p>
           <p className="mt-4 text-[11px] uppercase tracking-[0.2em] text-muted-foreground">
             Respiración · Breathwork · Meditación · Integración · Autoconocimiento
           </p>
         </div>
 
-        <div className="mt-12 grid gap-px overflow-hidden rounded-3xl border border-border bg-border lg:grid-cols-3">
+        <div className="mt-14 grid gap-4 lg:grid-cols-3">
           {TIERS.map((tier) => (
             <div
               key={tier.title}
-              className={`flex flex-col p-8 lg:p-10 ${tier.featured ? 'bg-card' : 'bg-background'}`}
+              className={`card-hover flex flex-col rounded-3xl border p-8 lg:p-10 ${
+                tier.featured
+                  ? 'border-primary/35 bg-[color-mix(in_oklch,var(--primary)_9%,var(--card))]'
+                  : 'border-border bg-card'
+              }`}
             >
-              <p className="text-[10px] uppercase tracking-[0.24em] text-primary">{tier.label}</p>
-              <h3 className="mt-5 font-display text-2xl leading-tight">{tier.title}</h3>
+              <div className="flex items-center justify-between gap-3">
+                <p className="text-[10px] uppercase tracking-[0.24em] text-primary">{tier.label}</p>
+                {tier.featured && (
+                  <span className="rounded-full bg-primary px-3 py-1 text-[10px] font-medium uppercase tracking-[0.15em] text-primary-foreground">
+                    Recomendado
+                  </span>
+                )}
+              </div>
+              <h3 className="display mt-6 text-3xl leading-tight">{tier.title}</h3>
               <p className="mt-2 text-sm text-muted-foreground">{tier.desc}</p>
-              <div className="my-6 h-px bg-border" />
-              <ul className="flex-1 space-y-2.5 text-sm text-muted-foreground">
+              <span className="hairline my-7 block" />
+              <ul className="flex-1 space-y-3 text-sm text-muted-foreground">
                 {tier.bullets.map((b) => (
-                  <li key={b} className="flex gap-2.5">
-                    <span className="text-primary">·</span>
+                  <li key={b} className="flex gap-3">
+                    <span className="mt-1.5 inline-block size-1.5 shrink-0 rounded-full bg-primary" />
                     {b}
                   </li>
                 ))}
@@ -71,7 +84,7 @@ export function WakeUp() {
                 href={tier.href}
                 target="_blank"
                 rel="noreferrer"
-                className={`mt-8 inline-flex h-11 items-center justify-center rounded-full px-6 text-sm font-medium transition-opacity hover:opacity-90 ${
+                className={`mt-8 inline-flex h-12 items-center justify-center rounded-full px-6 text-sm font-medium transition-opacity hover:opacity-90 ${
                   tier.featured
                     ? 'bg-primary text-primary-foreground'
                     : 'border border-border text-foreground'
@@ -83,9 +96,14 @@ export function WakeUp() {
           ))}
         </div>
 
-        <p className="mt-5 text-xs text-muted-foreground">
+        <p className="mt-6 text-xs text-muted-foreground">
           ¿Dudas?{' '}
-          <a href={WA('Hola JR, una mano para elegir mi camino en WAKE UP')} target="_blank" rel="noreferrer" className="text-primary underline underline-offset-4">
+          <a
+            href={WA('Hola JR, una mano para elegir mi camino en WAKE UP')}
+            target="_blank"
+            rel="noreferrer"
+            className="text-primary underline underline-offset-4"
+          >
             Habla con JR
           </a>{' '}
           — te digo cuál va contigo en 2 min.

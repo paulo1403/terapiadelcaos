@@ -1,7 +1,6 @@
 import { useState } from 'react'
 import { Search, Play } from 'lucide-react'
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog'
-import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel'
 import { HOTMART } from '../content/site'
 import { WA } from '../lib/wa'
 
@@ -45,26 +44,24 @@ export function Audiolibros() {
   )
 
   return (
-    <section id="audiolibros" className="relative px-6 py-20 lg:px-10 lg:py-28">
-      <div className="mx-auto max-w-6xl">
+    <section id="audiolibros" className="section">
+      <div className="shell">
         <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
           <div className="max-w-xl">
-            <p className="text-[11px] uppercase tracking-[0.3em] text-primary">21 audiolibros</p>
-            <h2 className="mt-4 font-display text-[clamp(2rem,5vw,3.5rem)] leading-[0.95] tracking-[-0.02em]">
-              Tu proceso desde casa
-            </h2>
-            <p className="mt-4 text-sm leading-relaxed text-muted-foreground">
+            <span className="eyebrow-pill">21 audiolibros</span>
+            <h2 className="display mt-6 text-[clamp(2.4rem,6vw,4.5rem)]">Tu proceso desde casa</h2>
+            <p className="mt-5 text-sm leading-relaxed text-muted-foreground">
               Escucha 2 min de cada uno. Elige tu puerta.{' '}
               <span className="font-medium text-foreground">Biblioteca curada por JR.</span>
             </p>
           </div>
           <div className="relative w-full lg:w-80">
-            <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+            <Search className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
             <input
               value={q}
               onChange={(e) => setQ(e.target.value)}
               placeholder="Buscar: ansiedad, duelo..."
-              className="h-11 w-full rounded-full border border-border bg-transparent pl-9 pr-4 text-sm outline-none transition-colors placeholder:text-muted-foreground focus:border-primary/50"
+              className="h-12 w-full rounded-full border border-border bg-transparent pl-10 pr-4 text-sm outline-none transition-colors placeholder:text-muted-foreground focus:border-primary/50"
             />
           </div>
         </div>
@@ -86,46 +83,41 @@ export function Audiolibros() {
           <span className="ml-auto pb-2 text-xs text-muted-foreground">{filtered.length} títulos</span>
         </div>
 
-        <Carousel opts={{ align: 'start' }} className="mt-8 w-full">
-          <CarouselContent className="-ml-4">
-            {filtered.map((l) => (
-              <CarouselItem key={l.id} className="basis-[80%] pl-4 sm:basis-1/2 lg:basis-1/3">
-                <button
-                  onClick={() => setOpen(l)}
-                  className="group flex h-full w-full flex-col text-left"
-                >
-                  <div className="relative flex aspect-[4/3] items-center justify-center overflow-hidden rounded-2xl border border-border bg-muted">
-                    <span className="font-display text-6xl text-muted-foreground/20 transition-colors group-hover:text-primary/40">
-                      {String(l.id).padStart(2, '0')}
-                    </span>
-                    <span className="absolute inset-0 flex items-center justify-center bg-background/60 opacity-0 backdrop-blur-sm transition-opacity group-hover:opacity-100">
-                      <span className="inline-flex items-center gap-2 rounded-full bg-primary px-4 py-2 text-xs font-medium text-primary-foreground">
-                        <Play className="h-3 w-3" /> Escuchar 2 min
-                      </span>
-                    </span>
-                    <span className="absolute left-3 top-3 text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
-                      {l.cat}
-                    </span>
-                  </div>
-                  <h3 className="mt-4 font-display text-lg leading-tight transition-colors group-hover:text-primary">
-                    {l.titulo}
-                  </h3>
-                  <p className="mt-1 line-clamp-2 text-xs text-muted-foreground">{l.desc}</p>
-                </button>
-              </CarouselItem>
-            ))}
-          </CarouselContent>
-          <CarouselPrevious className="hidden lg:flex" />
-          <CarouselNext className="hidden lg:flex" />
-        </Carousel>
-
-        {filtered.length === 0 && (
-          <p className="mt-8 text-sm text-muted-foreground">
+        {filtered.length === 0 ? (
+          <p className="mt-10 text-sm text-muted-foreground">
             Sin resultados — prueba otra búsqueda o categoría.
           </p>
+        ) : (
+          <div className="snap-x mt-10 pb-2">
+            {filtered.map((l) => (
+              <button
+                key={l.id}
+                onClick={() => setOpen(l)}
+                className="group w-[78%] text-left sm:w-[46%] lg:w-[31%]"
+              >
+                <div className="relative flex aspect-[4/3] items-center justify-center overflow-hidden rounded-3xl border border-border bg-card transition-colors group-hover:border-primary/40">
+                  <span className="display text-7xl text-foreground/10 transition-colors group-hover:text-primary/30">
+                    {String(l.id).padStart(2, '0')}
+                  </span>
+                  <span className="absolute inset-0 flex items-center justify-center bg-background/60 opacity-0 backdrop-blur-sm transition-opacity group-hover:opacity-100">
+                    <span className="inline-flex items-center gap-2 rounded-full bg-primary px-4 py-2 text-xs font-medium text-primary-foreground">
+                      <Play className="size-3" /> Escuchar 2 min
+                    </span>
+                  </span>
+                  <span className="absolute left-4 top-4 text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
+                    {l.cat}
+                  </span>
+                </div>
+                <h3 className="display mt-4 text-xl leading-tight transition-colors group-hover:text-primary">
+                  {l.titulo}
+                </h3>
+                <p className="mt-1 line-clamp-2 text-xs text-muted-foreground">{l.desc}</p>
+              </button>
+            ))}
+          </div>
         )}
 
-        <div className="mt-10 flex flex-col items-start justify-between gap-4 rounded-2xl border border-border p-6 sm:flex-row sm:items-center">
+        <div className="mt-10 flex flex-col items-start justify-between gap-4 rounded-3xl border border-border p-7 sm:flex-row sm:items-center">
           <div>
             <p className="text-sm font-medium">¿Quieres los 21 completos?</p>
             <p className="text-xs text-muted-foreground">Acceso inmediato · escucha offline · Hotmart</p>
@@ -134,7 +126,7 @@ export function Audiolibros() {
             href={HOTMART.audiobooks || WA('Hola JR, quiero los 21 audiolibros')}
             target="_blank"
             rel="noreferrer"
-            className="inline-flex h-11 items-center justify-center rounded-full bg-primary px-7 text-sm font-medium text-primary-foreground transition-opacity hover:opacity-90"
+            className="inline-flex h-12 items-center justify-center rounded-full bg-primary px-7 text-sm font-medium text-primary-foreground transition-opacity hover:opacity-90"
           >
             QUIERO LOS 21
           </a>
@@ -150,8 +142,8 @@ export function Audiolibros() {
             </DialogDescription>
           </DialogHeader>
           <div className="flex aspect-video flex-col items-center justify-center gap-3 rounded-xl border border-border">
-            <div className="flex h-12 w-12 items-center justify-center rounded-full bg-primary text-primary-foreground">
-              <Play className="ml-0.5 h-5 w-5" />
+            <div className="flex size-12 items-center justify-center rounded-full bg-primary text-primary-foreground">
+              <Play className="ml-0.5 size-5" />
             </div>
             <p className="text-sm text-muted-foreground">Preview 2 min — próximamente</p>
           </div>
