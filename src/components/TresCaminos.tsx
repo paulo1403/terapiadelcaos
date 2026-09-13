@@ -1,5 +1,4 @@
-import { useState } from 'react'
-import { Modal } from '@/components/ui/Modal'
+import { Dialog, DialogContent, DialogTrigger, DialogTitle, DialogDescription } from '@/components/ui/dialog'
 import { WA } from '../lib/wa'
 
 const CAMINOS = [
@@ -30,8 +29,6 @@ const CAMINOS = [
 ]
 
 export function TresCaminos() {
-  const [ayahuasca, setAyahuasca] = useState(false)
-
   return (
     <section className="section">
       <div className="shell">
@@ -54,9 +51,13 @@ export function TresCaminos() {
               <>
                 <div className="flex items-start justify-between gap-4">
                   <span className="display text-5xl text-primary/45">{c.n}</span>
-                  <span className="badge">{c.tag}</span>
+                  <span className="rounded-full border border-border px-3 py-1 text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
+                    {c.tag}
+                  </span>
                 </div>
-                <h3 className="display mt-8 text-3xl leading-tight">{c.title}</h3>
+                <h3 className="display mt-8 text-3xl leading-tight">
+                  {c.title}
+                </h3>
                 <p className="mt-3 flex-1 text-sm leading-relaxed text-muted-foreground">{c.desc}</p>
                 <span
                   className={`mt-8 inline-flex items-center gap-2 text-sm font-medium ${
@@ -69,7 +70,7 @@ export function TresCaminos() {
               </>
             )
 
-            const classes = `card-hover flex flex-col rounded-3xl border p-8 text-left lg:p-10 ${
+            const classes = `card-hover flex flex-col rounded-3xl border p-8 lg:p-10 ${
               featured
                 ? 'border-primary/25 bg-[color-mix(in_oklch,var(--primary)_8%,var(--card))] md:row-span-2'
                 : 'border-border bg-card'
@@ -77,14 +78,36 @@ export function TresCaminos() {
 
             if (i === 2) {
               return (
-                <button key={c.n} type="button" className={classes} onClick={() => setAyahuasca(true)}>
-                  {inner}
-                </button>
+                <Dialog key={c.n}>
+                  <DialogTrigger asChild>
+                    <button className={`${classes} text-left`}>{inner}</button>
+                  </DialogTrigger>
+                  <DialogContent>
+                    <DialogTitle className="font-display">Evaluación previa</DialogTitle>
+                    <DialogDescription className="text-sm">
+                      Requiere cuestionario y entrevista. No es para todos.
+                    </DialogDescription>
+                    <a
+                      href={c.href}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="mt-2 inline-flex h-10 items-center justify-center rounded-full bg-primary px-6 text-sm font-medium text-primary-foreground"
+                    >
+                      Hablar con JR
+                    </a>
+                  </DialogContent>
+                </Dialog>
               )
             }
 
             return (
-              <a key={c.n} href={c.href} target="_blank" rel="noreferrer" className={classes}>
+              <a
+                key={c.n}
+                href={c.href}
+                target="_blank"
+                rel="noreferrer"
+                className={classes}
+              >
                 {inner}
               </a>
             )
@@ -95,20 +118,6 @@ export function TresCaminos() {
           Cupos limitados · recomendado para transformación sostenida.
         </p>
       </div>
-
-      <Modal open={ayahuasca} onClose={() => setAyahuasca(false)} title="Evaluación previa">
-        <p className="text-sm text-muted-foreground">
-          Requiere cuestionario y entrevista. No es para todos.
-        </p>
-        <a
-          href={WA('Hola JR, info Ayahuasca')}
-          target="_blank"
-          rel="noreferrer"
-          className="btn btn-primary mt-5"
-        >
-          Hablar con JR
-        </a>
-      </Modal>
     </section>
   )
 }

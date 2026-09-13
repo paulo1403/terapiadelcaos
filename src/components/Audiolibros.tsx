@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { Search, Play } from 'lucide-react'
-import { Modal } from '@/components/ui/Modal'
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog'
 import { HOTMART } from '../content/site'
 import { WA } from '../lib/wa'
 
@@ -133,17 +133,22 @@ export function Audiolibros() {
         </div>
       </div>
 
-      <Modal open={!!open} onClose={() => setOpen(null)} title={open?.titulo ?? ''}>
-        <p className="text-sm text-muted-foreground">
-          {open?.cat} · {open?.desc}
-        </p>
-        <div className="mt-4 flex aspect-video flex-col items-center justify-center gap-3 rounded-xl border border-border">
-          <div className="flex size-12 items-center justify-center rounded-full bg-primary text-primary-foreground">
-            <Play className="ml-0.5 size-5" />
+      <Dialog open={!!open} onOpenChange={() => setOpen(null)}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle className="font-display text-xl">{open?.titulo}</DialogTitle>
+            <DialogDescription>
+              {open?.cat} · {open?.desc}
+            </DialogDescription>
+          </DialogHeader>
+          <div className="flex aspect-video flex-col items-center justify-center gap-3 rounded-xl border border-border">
+            <div className="flex size-12 items-center justify-center rounded-full bg-primary text-primary-foreground">
+              <Play className="ml-0.5 size-5" />
+            </div>
+            <p className="text-sm text-muted-foreground">Preview 2 min — próximamente</p>
           </div>
-          <p className="text-sm text-muted-foreground">Preview 2 min — próximamente</p>
-        </div>
-      </Modal>
+        </DialogContent>
+      </Dialog>
     </section>
   )
 }

@@ -1,5 +1,4 @@
-import { useState } from 'react'
-import { Modal } from '@/components/ui/Modal'
+import { Dialog, DialogContent, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
 import { WA } from '../lib/wa'
 
 const TESTIMONIOS = [
@@ -11,7 +10,6 @@ const TESTIMONIOS = [
 const MANIFIESTO = ['No huyas de lo que sientes.', 'Escucha.', 'Respira.', 'Observa.', 'Comprende.', 'Integra.', 'Despierta.']
 
 export function JR() {
-  const [quien, setQuien] = useState(false)
   return (
     <section id="jr" className="section">
       <div className="shell grid gap-14 lg:grid-cols-[320px_1fr] lg:gap-20">
@@ -40,13 +38,20 @@ export function JR() {
           <p className="mt-6 max-w-[260px] text-xs leading-relaxed text-muted-foreground">
             No te arreglo. Te acompaño a atravesar tu caos con herramientas reales.
           </p>
-          <button
-            type="button"
-            onClick={() => setQuien(true)}
-            className="mt-6 text-sm font-medium text-primary underline underline-offset-4"
-          >
-            Ver quién soy →
-          </button>
+          <Dialog>
+            <DialogTrigger asChild>
+              <button className="mt-6 text-sm font-medium text-primary underline underline-offset-4">
+                Ver quién soy →
+              </button>
+            </DialogTrigger>
+            <DialogContent className="max-w-xl">
+              <DialogTitle className="font-display text-xl">Mi camino</DialogTitle>
+              <p className="text-sm leading-relaxed text-muted-foreground">
+                Mi camino no empezó en consultorio. Empezó en dolor y búsqueda. Aprendí a hacer
+                mejores preguntas, no a dar respuestas.
+              </p>
+            </DialogContent>
+          </Dialog>
         </div>
 
         <div className="space-y-14">
@@ -109,13 +114,6 @@ export function JR() {
           </div>
         </div>
       </div>
-
-      <Modal open={quien} onClose={() => setQuien(false)} title="Mi camino">
-        <p className="text-sm leading-relaxed text-muted-foreground">
-          Mi camino no empezó en consultorio. Empezó en dolor y búsqueda. Aprendí a hacer mejores
-          preguntas, no a dar respuestas.
-        </p>
-      </Modal>
     </section>
   )
 }

@@ -1,13 +1,12 @@
-import { useState } from 'react'
 import { WHATSAPP_LINK } from '../content/site'
-import { Modal } from '@/components/ui/Modal'
+import { Button } from '@/components/ui/button'
+import { Dialog, DialogContent, DialogTrigger, DialogTitle } from '@/components/ui/dialog'
 import heroDesktop from '../assets/hero-immersive-desktop.png'
 import heroMobile from '../assets/hero-immersive-mobile.png'
 import { useSite } from '../lib/site'
 
 export function Hero() {
   const { content } = useSite()
-  const [historia, setHistoria] = useState(false)
 
   return (
     <section id="inicio" className="hero">
@@ -48,12 +47,28 @@ export function Hero() {
               </p>
 
               <div className="mt-7 flex flex-col items-start gap-4 sm:flex-row sm:items-center">
-                <a href="#terapia" className="btn btn-primary">
-                  {content['hero.cta1'] ?? 'CONOCER TERAPIA DEL CAOS'}
-                </a>
-                <button type="button" className="btn btn-outline" onClick={() => setHistoria(true)}>
-                  {content['hero.cta2'] ?? 'VER HISTORIA JR'}
-                </button>
+                <Button asChild size="lg" className="h-12 rounded-full px-8 text-[13px] tracking-wide">
+                  <a href="#terapia">{content['hero.cta1'] ?? 'CONOCER TERAPIA DEL CAOS'}</a>
+                </Button>
+                <Dialog>
+                  <DialogTrigger asChild>
+                    <Button
+                      variant="outline"
+                      size="lg"
+                      className="h-12 rounded-full border-[#efe9df]/25 bg-transparent px-8 text-[13px] tracking-wide text-[#efe9df] hover:bg-[#efe9df]/10 hover:text-[#efe9df]"
+                    >
+                      {content['hero.cta2'] ?? 'VER HISTORIA JR'}
+                    </Button>
+                  </DialogTrigger>
+                  <DialogContent className="max-w-2xl border-[#efe9df]/15 bg-[#0d0d0f] p-0 overflow-hidden">
+                    <DialogTitle className="sr-only">Historia JR</DialogTitle>
+                    <div className="flex aspect-video items-center justify-center p-8">
+                      <p className="max-w-md text-center font-display text-2xl leading-snug text-[#efe9df]">
+                        “No me curaron, me enseñaron a sostenerme.”
+                      </p>
+                    </div>
+                  </DialogContent>
+                </Dialog>
               </div>
 
               <a
@@ -87,14 +102,6 @@ export function Hero() {
           Scroll
         </div>
       </div>
-
-      <Modal open={historia} onClose={() => setHistoria(false)} title="Historia JR">
-        <div className="flex aspect-video items-center justify-center p-6">
-          <p className="max-w-md text-center font-display text-2xl leading-snug">
-            “No me curaron, me enseñaron a sostenerme.”
-          </p>
-        </div>
-      </Modal>
     </section>
   )
 }
