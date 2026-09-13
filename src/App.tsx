@@ -43,10 +43,7 @@ export default function App() {
 
   return (
     <>
-      <a
-        href="#inicio"
-        className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[60] focus:rounded-full focus:bg-primary focus:px-5 focus:py-2 focus:text-sm focus:text-primary-foreground"
-      >
+      <a href="#inicio" className="skip-link">
         Saltar al contenido
       </a>
       <Navbar />
