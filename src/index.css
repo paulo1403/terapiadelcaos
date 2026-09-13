@@ -394,3 +394,11 @@ p {
 
 
 
+
+/* Fondo global (OGL): atmósfera detrás de todo el sitio */
+.global-bg {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+}

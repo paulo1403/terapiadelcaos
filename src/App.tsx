@@ -1,5 +1,6 @@
 import { lazy, Suspense } from 'react'
 import type { ComponentType } from 'react'
+import { GlobalBackground } from './components/GlobalBackground'
 import { Navbar } from './components/Navbar'
 import { Hero } from './components/Hero'
 import { WhatsappFab } from './components/WhatsappFab'
@@ -43,6 +44,7 @@ export default function App() {
 
   return (
     <>
+      <GlobalBackground />
       <a
         href="#inicio"
         className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[60] focus:rounded-full focus:bg-primary focus:px-5 focus:py-2 focus:text-sm focus:text-primary-foreground"
