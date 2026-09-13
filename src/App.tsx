@@ -1,19 +1,29 @@
+import { lazy, Suspense } from 'react'
 import type { ComponentType } from 'react'
 import { Navbar } from './components/Navbar'
 import { Hero } from './components/Hero'
-import { TresCaminos } from './components/TresCaminos'
-import { Terapia } from './components/Terapia'
-import { WakeUp } from './components/WakeUp'
-import { Cursos } from './components/Cursos'
-import { Quiz } from './components/Quiz'
-import { Audiolibros } from './components/Audiolibros'
-import { Despertares } from './components/Despertares'
-import { Medicina } from './components/Medicina'
-import { JR } from './components/JR'
 import { WhatsappFab } from './components/WhatsappFab'
 import { Footer } from './components/Footer'
 import { useSite } from './lib/site'
 import './App.css'
+
+const TresCaminos = lazy(() =>
+  import('./components/TresCaminos').then((m) => ({ default: m.TresCaminos })),
+)
+const Quiz = lazy(() => import('./components/Quiz').then((m) => ({ default: m.Quiz })))
+const Terapia = lazy(() => import('./components/Terapia').then((m) => ({ default: m.Terapia })))
+const WakeUp = lazy(() => import('./components/WakeUp').then((m) => ({ default: m.WakeUp })))
+const Cursos = lazy(() => import('./components/Cursos').then((m) => ({ default: m.Cursos })))
+const Audiolibros = lazy(() =>
+  import('./components/Audiolibros').then((m) => ({ default: m.Audiolibros })),
+)
+const Despertares = lazy(() =>
+  import('./components/Despertares').then((m) => ({ default: m.Despertares })),
+)
+const Medicina = lazy(() =>
+  import('./components/Medicina').then((m) => ({ default: m.Medicina })),
+)
+const JR = lazy(() => import('./components/JR').then((m) => ({ default: m.JR })))
 
 const REGISTRY: Record<string, ComponentType> = {
   hero: Hero,
@@ -43,7 +53,12 @@ export default function App() {
       <main id="contenido">
         {sections.map((section) => {
           const Section = REGISTRY[section.id]
-          return Section ? <Section key={section.id} /> : null
+          if (!Section) return null
+          return (
+            <Suspense key={section.id} fallback={null}>
+              <Section />
+            </Suspense>
+          )
         })}
       </main>
       <Footer />

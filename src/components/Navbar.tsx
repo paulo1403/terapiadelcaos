@@ -11,7 +11,7 @@ import {
 } from '@/components/ui/sheet'
 import { Separator } from '@/components/ui/separator'
 import { Menu, Moon, Sun } from 'lucide-react'
-import { scrollTo } from '@/lib/lenis'
+import { scrollTo } from '@/lib/scroll'
 import { useSite } from '../lib/site'
 import { useTheme } from '../lib/theme'
 
