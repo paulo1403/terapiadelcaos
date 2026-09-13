@@ -66,13 +66,13 @@ export function Quiz() {
 
   return (
     <section className="section">
-      <div className="shell max-w-3xl">
+      <div className="quiz">
         {result ? (
-          <div className="card p-8 text-center lg:p-12">
-            <p className="text-xs uppercase tracking-[0.24em] text-muted-foreground">Te recomiendo</p>
-            <p className="display mt-3 text-3xl lg:text-4xl">{titulo}</p>
-            <p className="mx-auto mt-3 max-w-md text-sm text-muted-foreground">{detalle}</p>
-            <div className="mt-7 flex flex-col justify-center gap-3 sm:flex-row">
+          <div className="card quiz-card quiz-result">
+            <p className="quiz-result-label">Te recomiendo</p>
+            <p className="quiz-result-title">{titulo}</p>
+            <p className="quiz-result-desc">{detalle}</p>
+            <div className="quiz-actions">
               <a
                 href={WHATSAPP_LINK + '?text=' + encodeURIComponent(waText[result])}
                 target="_blank"
@@ -87,31 +87,29 @@ export function Quiz() {
             </div>
           </div>
         ) : (
-          <div className="card p-7 lg:p-10">
-            <div className="text-center">
-              <p className="text-[11px] tracking-[0.2em] text-muted-foreground">QUIZ · 30 SEG</p>
-              <h2 className="display mt-2 text-3xl">¿No sabes por dónde empezar?</h2>
-              <p className="mt-2 text-sm text-muted-foreground">
-                2 preguntas → te digo qué camino va contigo
-              </p>
+          <div className="card quiz-card">
+            <div>
+              <p className="quiz-eyebrow">QUIZ · 30 SEG</p>
+              <h2 className="quiz-title">¿No sabes por dónde empezar?</h2>
+              <p className="quiz-sub">2 preguntas → te digo qué camino va contigo</p>
             </div>
 
-            <form onSubmit={handleSubmit} className="mt-8 flex flex-col gap-8">
+            <form onSubmit={handleSubmit} className="quiz-form">
               {items.map((q) => (
-                <fieldset key={q.name} className="flex flex-col gap-4 border-0 p-0">
-                  <legend className="display text-xl">{q.prompt}</legend>
-                  <p className="-mt-2 text-sm text-muted-foreground">{q.description}</p>
-                  <div className="flex flex-col gap-3">
+                <fieldset key={q.name} className="quiz-fieldset">
+                  <legend className="quiz-legend">{q.prompt}</legend>
+                  <p className="quiz-desc">{q.description}</p>
+                  <div className="quiz-choices">
                     {q.choices.map((c) => (
                       <label key={c.value} className="choice">
                         <input type="radio" name={q.name} value={c.value} required />
-                        <span className="text-sm">{c.label}</span>
+                        <span>{c.label}</span>
                       </label>
                     ))}
                   </div>
                 </fieldset>
               ))}
-              <button type="submit" className="btn btn-primary w-full">
+              <button type="submit" className="btn btn-primary full">
                 Ver recomendación
               </button>
             </form>
