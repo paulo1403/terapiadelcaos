@@ -1,0 +1,14 @@
+{
+  "name": "terapiadelcaos-admin",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "bun --watch src/index.ts",
+    "start": "bun src/index.ts",
+    "typecheck": "tsc --noEmit",
+    "smoke": "bash scripts/smoke.sh"
+  },
+  "devDependencies": {
+    "typescript": "^7.0.2"
+  }
+}
